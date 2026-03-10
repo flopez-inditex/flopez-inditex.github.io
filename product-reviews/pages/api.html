@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API · Product Reviews Docs</title>
+    <link rel="stylesheet" href="/product-reviews/styles/main.css" />
+  </head>
+  <body>
+    <header><div class="container">
+      <h1>API</h1>
+      <nav>
+        <a href="/product-reviews/">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="architecture.html">Architecture</a>
+        <a href="faq.html">FAQ</a>
+      </nav>
+    </div></header>
+    <main class="container">
+      <section class="card">
+        <h2>Endpoints</h2>
+        <ul>
+          <li><strong>POST</strong> /reviews — Create review</li>
+          <li><strong>GET</strong> /reviews/{id} — Get review details</li>
+          <li><strong>GET</strong> /products/{productId}/reviews — List product reviews</li>
+          <li><strong>PATCH</strong> /reviews/{id}/status — Update moderation status</li>
+        </ul>
+      </section>
+      <section class="card">
+        <h2>Example Payload</h2>
+        <pre style="background:#f1f5f9;padding:1rem;border-radius:8px;overflow:auto">{
+  "productId": "SKU-123",
+  "rating": 5,
+  "title": "Great quality",
+  "comment": "Fast delivery and excellent fit",
+  "author": "anonymous"
+}</pre>
+      </section>
+    </main>
+    <footer class="container">Product Reviews Docs &middot; API</footer>
+  </body>
+</html>

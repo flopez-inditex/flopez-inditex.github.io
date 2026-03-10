@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Architecture · Product Reviews Docs</title>
+    <link rel="stylesheet" href="/product-reviews/styles/main.css" />
+  </head>
+  <body>
+    <header><div class="container">
+      <h1>Architecture</h1>
+      <nav>
+        <a href="/product-reviews/">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="api.html">API</a>
+        <a href="faq.html">FAQ</a>
+      </nav>
+    </div></header>
+    <main class="container">
+      <section class="card">
+        <h2>Core Components</h2>
+        <ul>
+          <li>Review API: receives and validates incoming reviews.</li>
+          <li>Moderation Service: enforces policy and abuse controls.</li>
+          <li>Storage Layer: persists review entities and moderation states.</li>
+          <li>Events Pipeline: emits review lifecycle events for downstream consumers.</li>
+        </ul>
+      </section>
+      <section class="card">
+        <h2>Primary Flow</h2>
+        <ol>
+          <li>Client submits review.</li>
+          <li>Review API validates payload and writes initial status.</li>
+          <li>Moderation Service updates status (approved / rejected / flagged).</li>
+          <li>Approved content is exposed to consumers and indexed for search.</li>
+        </ol>
+      </section>
+    </main>
+    <footer class="container">Product Reviews Docs &middot; Architecture</footer>
+  </body>
+</html>

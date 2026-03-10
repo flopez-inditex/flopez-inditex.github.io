@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flopez-inditex — Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #f8fafc;
+        color: #1e293b;
+        min-height: 100vh;
+      }
+      header {
+        background: linear-gradient(135deg, #0b5fff 0%, #0036b3 100%);
+        color: #fff;
+        padding: 4rem 1.5rem 3rem;
+        text-align: center;
+      }
+      header h1 { font-size: 2.25rem; font-weight: 700; letter-spacing: -0.03em; }
+      header p { margin-top: 0.75rem; font-size: 1.1rem; opacity: 0.85; }
+      main {
+        max-width: 900px;
+        margin: -2rem auto 4rem;
+        padding: 0 1.5rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.25rem;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 1px 4px rgba(0,0,0,.06);
+        transition: box-shadow .2s, transform .2s;
+      }
+      .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,.1); transform: translateY(-2px); }
+      .card-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+      .card h2 { font-size: 1.05rem; font-weight: 600; }
+      .card p { margin-top: 0.4rem; font-size: 0.9rem; color: #64748b; line-height: 1.5; }
+      .pill {
+        display: inline-block;
+        margin-top: 0.75rem;
+        padding: 0.2rem 0.7rem;
+        border-radius: 99px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        background: #eff6ff;
+        color: #0b5fff;
+      }
+      footer { text-align: center; color: #94a3b8; font-size: 0.85rem; padding: 2rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>flopez-inditex</h1>
+      <p>Account documentation portal · GitHub Pages</p>
+    </header>
+    <main>
+      <div class="grid">
+        <a class="card" href="/product-reviews/">
+          <span class="card-icon">&#11088;</span>
+          <h2>Product Reviews</h2>
+          <p>Functional and technical documentation for the Product Reviews domain.</p>
+          <span class="pill">View docs &rarr;</span>
+        </a>
+      </div>
+    </main>
+    <footer>flopez-inditex · GitHub Pages · 2026</footer>
+  </body>
+</html>
