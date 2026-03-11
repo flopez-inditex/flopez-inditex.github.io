@@ -60,21 +60,6 @@
   .page-header h1 { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -0.025em; line-height: 1.08; margin: 12px 0 10px; }
   .page-header p { font-size: 15px; color: var(--text-secondary); max-width: 620px; line-height: 1.6; }
 
-  /* ─── INTRO BLOCK ─── */
-  .intro-block {
-    border-radius: 16px;
-    border: 1px dashed rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.015);
-    padding: 24px 28px;
-    margin-bottom: 40px;
-  }
-  .intro-block p {
-    font-size: 14px;
-    color: var(--text-tertiary);
-    line-height: 1.7;
-    font-style: italic;
-  }
-
   /* ─── SECTION BLOCK ─── */
   .section-block {
     border-radius: 20px;
@@ -179,13 +164,12 @@
     padding-top: 4px;
   }
 
-  /* The continuous rail behind all nodes */
   .timeline::before {
     content: '';
     position: absolute;
-    top: 24px; /* center of node (48px / 2) */
-    left: 24px; /* center of first node */
-    right: 24px; /* center of last node */
+    top: 24px;
+    left: 24px;
+    right: 24px;
     height: 1px;
     background: linear-gradient(
       to right,
@@ -205,7 +189,6 @@
     gap: 0;
   }
 
-  /* Node */
   .timeline-node {
     width: 48px;
     height: 48px;
@@ -229,7 +212,6 @@
     box-shadow: 0 0 18px rgba(52,199,89,0.22), 0 0 6px rgba(52,199,89,0.15);
   }
 
-  /* Vertical stem from node to card */
   .timeline-stem {
     width: 1px;
     height: 14px;
@@ -237,7 +219,6 @@
     flex-shrink: 0;
   }
 
-  /* Card */
   .timeline-card {
     width: 100%;
     border-radius: 14px;
@@ -254,7 +235,6 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   }
 
-  /* Phase label inside card */
   .timeline-phase {
     font-size: 9px;
     font-weight: 700;
@@ -265,7 +245,6 @@
     margin-bottom: 6px;
   }
 
-  /* Card body text */
   .timeline-card-text {
     font-size: 11.5px;
     color: var(--text-secondary);
@@ -294,11 +273,6 @@
   <div class="page-header reveal">
     <p class="label">Grid-Core · Product Review</p>
     <h1>Situación actual y próximos pasos</h1>
-  </div>
-
-  <!-- ══ INTRO ══ -->
-  <div class="intro-block reveal">
-    <p>Introducción pendiente de redactar.</p>
   </div>
 
   <!-- ══ SECCIÓN 1 ══ -->
@@ -536,7 +510,6 @@
   gsap.registerPlugin(ScrollTrigger);
 
   gsap.fromTo('.page-header', { opacity:0, y:20 }, { opacity:1, y:0, duration:0.8, ease:'power3.out' });
-  gsap.fromTo('.intro-block', { opacity:0, y:16 }, { opacity:1, y:0, duration:0.7, ease:'power3.out', delay:0.15 });
 
   document.querySelectorAll('.reveal').forEach((el, i) => {
     gsap.fromTo(el,
