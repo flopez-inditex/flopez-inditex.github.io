@@ -245,38 +245,42 @@
     margin: 22px 0;
   }
 
-  /* ─── ROADMAP STEPS ─── */
-  .roadmap-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    position: relative;
+  /* ─── HORIZONTAL TIMELINE ─── */
+  .timeline-wrap {
+    overflow-x: auto;
+    padding-bottom: 8px;
   }
-  .roadmap-list::before {
-    content: '';
-    position: absolute;
-    left: 17px;
-    top: 28px;
-    bottom: 28px;
-    width: 1px;
-    background: linear-gradient(to bottom, rgba(52,199,89,0.4), rgba(52,199,89,0.05));
-  }
-  .roadmap-step {
+  .timeline {
     display: flex;
     align-items: flex-start;
-    gap: 18px;
-    padding: 14px 0;
+    gap: 0;
+    min-width: 560px;
+    position: relative;
+    padding-top: 8px;
+  }
+  .timeline-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
   }
-  .roadmap-step + .roadmap-step {
-    border-top: 1px solid var(--border);
+  /* horizontal connector line between items */
+  .timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 17px;
+    left: 50%;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, rgba(52,199,89,0.5), rgba(52,199,89,0.15));
   }
-  .roadmap-step-number {
+  .timeline-node {
     width: 34px;
     height: 34px;
     border-radius: 50%;
     background: rgba(52,199,89,0.1);
-    border: 1px solid rgba(52,199,89,0.25);
+    border: 1px solid rgba(52,199,89,0.35);
     color: var(--accent-green);
     font-size: 12px;
     font-weight: 700;
@@ -286,12 +290,19 @@
     flex-shrink: 0;
     position: relative;
     z-index: 1;
+    transition: background 0.25s, border-color 0.25s;
   }
-  .roadmap-step-text {
-    font-size: 13px;
+  .timeline-item:hover .timeline-node {
+    background: rgba(52,199,89,0.18);
+    border-color: rgba(52,199,89,0.6);
+  }
+  .timeline-label {
+    margin-top: 14px;
+    padding: 0 10px;
+    font-size: 12px;
     color: var(--text-secondary);
-    line-height: 1.65;
-    padding-top: 7px;
+    line-height: 1.6;
+    text-align: center;
   }
 
   /* ─── PILLS ─── */
@@ -501,25 +512,32 @@
       <div class="section-accent" style="background:var(--accent-green)"></div>
       <div>
         <div class="section-title">Hoja de ruta</div>
-        <div class="section-desc">Próximos pasos, priorización y milestones</div>
+        <div class="section-desc">Próximos pasos y priorización</div>
       </div>
     </div>
-    <div class="roadmap-list">
-      <div class="roadmap-step">
-        <div class="roadmap-step-number">1</div>
-        <p class="roadmap-step-text">Obtener un listado completo de funcionalidades no utilizadas.</p>
-      </div>
-      <div class="roadmap-step">
-        <div class="roadmap-step-number">2</div>
-        <p class="roadmap-step-text">Identificar más casos de uso que chocan o se contradicen entre sí.</p>
-      </div>
-      <div class="roadmap-step">
-        <div class="roadmap-step-number">3</div>
-        <p class="roadmap-step-text">Revisión con PACMAN sobre los casos anteriores, comportamientos actuales y posibles evoluciones futuras.</p>
-      </div>
-      <div class="roadmap-step">
-        <div class="roadmap-step-number">4</div>
-        <p class="roadmap-step-text">Diseño de una solución.</p>
+    <div class="timeline-wrap">
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-node">1</div>
+          <p class="timeline-label">Obtener un listado completo de funcionalidades no utilizadas.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node">2</div>
+          <p class="timeline-label">Identificar más casos de uso que chocan o se contradicen entre sí.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node">3</div>
+          <p class="timeline-label">Revisión con PACMAN sobre los casos anteriores, comportamientos actuales y posibles evoluciones futuras.</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-node">4</div>
+          <p class="timeline-label">Diseño de una solución.</p>
+        </div>
+
       </div>
     </div>
   </div>
