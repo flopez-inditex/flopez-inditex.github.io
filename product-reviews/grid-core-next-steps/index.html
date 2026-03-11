@@ -245,6 +245,55 @@
     margin: 22px 0;
   }
 
+  /* ─── ROADMAP STEPS ─── */
+  .roadmap-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .roadmap-list::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 28px;
+    bottom: 28px;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(52,199,89,0.4), rgba(52,199,89,0.05));
+  }
+  .roadmap-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 14px 0;
+    position: relative;
+  }
+  .roadmap-step + .roadmap-step {
+    border-top: 1px solid var(--border);
+  }
+  .roadmap-step-number {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(52,199,89,0.1);
+    border: 1px solid rgba(52,199,89,0.25);
+    color: var(--accent-green);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .roadmap-step-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    padding-top: 7px;
+  }
+
   /* ─── PILLS ─── */
   .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
   .pill-green  { background: rgba(52,199,89,0.15);  color: #34C759; border: 1px solid rgba(52,199,89,0.2); }
@@ -455,9 +504,23 @@
         <div class="section-desc">Próximos pasos, priorización y milestones</div>
       </div>
     </div>
-    <div class="empty-state">
-      <span class="empty-state-icon">&#128506;</span>
-      <span class="empty-state-text">Contenido pendiente de añadir.</span>
+    <div class="roadmap-list">
+      <div class="roadmap-step">
+        <div class="roadmap-step-number">1</div>
+        <p class="roadmap-step-text">Obtener un listado completo de funcionalidades no utilizadas.</p>
+      </div>
+      <div class="roadmap-step">
+        <div class="roadmap-step-number">2</div>
+        <p class="roadmap-step-text">Identificar más casos de uso que chocan o se contradicen entre sí.</p>
+      </div>
+      <div class="roadmap-step">
+        <div class="roadmap-step-number">3</div>
+        <p class="roadmap-step-text">Revisión con PACMAN sobre los casos anteriores, comportamientos actuales y posibles evoluciones futuras.</p>
+      </div>
+      <div class="roadmap-step">
+        <div class="roadmap-step-number">4</div>
+        <p class="roadmap-step-text">Diseño de una solución.</p>
+      </div>
     </div>
   </div>
 
