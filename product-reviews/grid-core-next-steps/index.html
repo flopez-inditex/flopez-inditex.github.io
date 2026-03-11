@@ -152,6 +152,57 @@
   .empty-state-icon { font-size: 16px; opacity: 0.4; }
   .empty-state-text { font-size: 12px; color: var(--text-tertiary); font-style: italic; }
 
+  /* ─── CONFLICT TABLE ─── */
+  .conflict-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .conflict-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .conflict-table thead tr {
+    border-bottom: 1px solid rgba(90,200,250,0.2);
+  }
+  .conflict-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-cyan);
+    background: rgba(90,200,250,0.04);
+    white-space: nowrap;
+  }
+  .conflict-table td {
+    padding: 13px 16px;
+    color: var(--text-secondary);
+    vertical-align: top;
+    border-top: 1px solid var(--border);
+  }
+  .conflict-table tbody tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+  .conflict-table tbody tr.empty-row td {
+    height: 44px;
+    border-top: 1px dashed rgba(255,255,255,0.05);
+  }
+  .conflict-tag {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 8px;
+    background: rgba(90,200,250,0.1);
+    border: 1px solid rgba(90,200,250,0.2);
+    color: var(--accent-cyan);
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
   /* ─── PILLS ─── */
   .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
   .pill-green  { background: rgba(52,199,89,0.15);  color: #34C759; border: 1px solid rgba(52,199,89,0.2); }
@@ -242,12 +293,51 @@
       <div class="section-accent" style="background:var(--accent-cyan)"></div>
       <div>
         <div class="section-title">Funcionalidades cruzadas</div>
-        <div class="section-desc">Dependencias e iniciativas compartidas con otros equipos</div>
+        <div class="section-desc">Algunos casos de uso que chocan o se contradicen entre sí</div>
       </div>
     </div>
-    <div class="empty-state">
-      <span class="empty-state-icon">&#128101;</span>
-      <span class="empty-state-text">Contenido pendiente de añadir.</span>
+    <div class="conflict-table-wrap">
+      <table class="conflict-table">
+        <thead>
+          <tr>
+            <th>Conflicto</th>
+            <th>Escenario de Fricción</th>
+            <th>Riesgo / Resultado Actual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="conflict-tag">Manual Sort vs. Top N Limit</span></td>
+            <td>Se fija un producto (pin) en la posición 12, pero se limita la sección a los 10 primeros.</td>
+            <td>El producto fijado queda fuera del rango visible, invalidando la acción del editor.</td>
+          </tr>
+          <tr>
+            <td><span class="conflict-tag">Top N Limit vs. Integridad de Bloque</span></td>
+            <td>Límite de 5 productos, pero en la posición 4 se inserta un bloque editorial de 10 ítems.</td>
+            <td>Se rompe el límite (mostrando 13 productos) para no fragmentar el bloque comercial.</td>
+          </tr>
+          <tr>
+            <td><span class="conflict-tag">Manual Pins vs. Top N Exclusions</span></td>
+            <td>Regla de exclusión de "zapatos" en el top 5, pero se fuerza manualmente una "bota" en la posición 1.</td>
+            <td>Contradicción directa entre una regla automática de filtrado y una acción manual prioritaria.</td>
+          </tr>
+          <tr>
+            <td><span class="conflict-tag">Show Always vs. Filtros de Sección</span></td>
+            <td>Una sección filtrada por "Vestidos" incluye una "Bufanda" porque tiene activa la bandera Show Always.</td>
+            <td>Ruptura de la coherencia visual y temática de la sección por excepciones manuales.</td>
+          </tr>
+          <tr>
+            <td><span class="conflict-tag">Model Cleanliness vs. Inclusión Manual</span></td>
+            <td>Regla de "un color por modelo", pero el editor fija manualmente dos variantes del mismo producto.</td>
+            <td>Degradación de la limpieza visual de la parrilla y violación de las reglas de negocio automáticas.</td>
+          </tr>
+          <tr class="empty-row">
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
