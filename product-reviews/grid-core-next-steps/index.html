@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalog Core · Forma de trabajar</title>
+<title>Grid-Core · Situación actual y próximos pasos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -55,10 +55,27 @@
 
   .reveal { opacity: 1; }
 
-  .page-header { margin-bottom: 56px; }
+  /* ─── HEADER ─── */
+  .page-header { margin-bottom: 48px; }
   .page-header h1 { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -0.025em; line-height: 1.08; margin: 12px 0 10px; }
-  .page-header p { font-size: 15px; color: var(--text-secondary); max-width: 540px; line-height: 1.6; }
+  .page-header p { font-size: 15px; color: var(--text-secondary); max-width: 620px; line-height: 1.6; }
 
+  /* ─── INTRO BLOCK ─── */
+  .intro-block {
+    border-radius: 16px;
+    border: 1px dashed rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.015);
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+  .intro-block p {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ─── SECTION BLOCK ─── */
   .section-block {
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -76,8 +93,20 @@
   .section-title { font-size: 17px; font-weight: 600; letter-spacing: -0.021em; margin-bottom: 4px; }
   .section-desc { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
 
-  .section-label-row { margin-bottom: 10px; padding-left: 2px; }
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px dashed rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.012);
+  }
+  .empty-state-icon { font-size: 16px; opacity: 0.4; }
+  .empty-state-text { font-size: 12px; color: var(--text-tertiary); font-style: italic; }
 
+  /* ─── PILLS ─── */
   .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
   .pill-green  { background: rgba(52,199,89,0.15);  color: #34C759; border: 1px solid rgba(52,199,89,0.2); }
   .pill-orange { background: rgba(255,149,0,0.15);  color: #FF9500; border: 1px solid rgba(255,149,0,0.2); }
@@ -88,497 +117,88 @@
   .pill-yellow { background: rgba(255,214,10,0.15); color: #FFD60A; border: 1px solid rgba(255,214,10,0.2); }
   .pill-grey   { background: rgba(255,255,255,0.06); color: var(--text-tertiary); border: 1px solid var(--border); }
 
-  .artifacts { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
-  .art { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.01em; border: 1px solid; }
-  .art-blue   { background: rgba(0,122,255,0.1);   color: #007AFF; border-color: rgba(0,122,255,0.22); }
-  .art-green  { background: rgba(52,199,89,0.1);   color: #34C759; border-color: rgba(52,199,89,0.22); }
-  .art-orange { background: rgba(255,149,0,0.1);   color: #FF9500; border-color: rgba(255,149,0,0.22); }
-  .art-cyan   { background: rgba(90,200,250,0.1);  color: #5AC8FA; border-color: rgba(90,200,250,0.22); }
-  .art-purple { background: rgba(191,90,242,0.1);  color: #BF5AF2; border-color: rgba(191,90,242,0.22); }
-  .art-yellow { background: rgba(255,214,10,0.1);  color: #FFD60A; border-color: rgba(255,214,10,0.22); }
-  .art-red    { background: rgba(255,59,48,0.1);   color: #FF3B30; border-color: rgba(255,59,48,0.22); }
-
-  .flow { display: flex; flex-direction: column; }
-  .step-row { display: grid; grid-template-columns: 52px 1fr; align-items: stretch; }
-
-  .spine { display: flex; flex-direction: column; align-items: center; }
-  .spine-node {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; border: 1.5px solid;
-    flex-shrink: 0; z-index: 2;
-    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
-    cursor: pointer; margin-top: 20px;
-  }
-  .spine-node:hover { transform: scale(1.1); }
-  .spine-node.active { box-shadow: 0 0 0 4px rgba(255,255,255,0.07); }
-
-  .spine-seg { width: 1.5px; flex: 1; min-height: 16px; }
-  .spine-seg-solid { background: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); }
-  .spine-seg-dashed {
-    background: repeating-linear-gradient(to bottom,
-      rgba(255,149,0,0.45) 0, rgba(255,149,0,0.45) 4px,
-      transparent 4px, transparent 9px);
-  }
-
-  .step-card {
-    margin: 10px 0 10px 16px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.025);
-    overflow: hidden;
-    transition: border-color 0.3s, background 0.3s;
-    cursor: pointer;
-  }
-  .step-card:hover { border-color: rgba(255,255,255,0.13); background: rgba(255,255,255,0.04); }
-  .step-card.active { background: rgba(255,255,255,0.045); border-color: var(--border-strong); }
-
-  .step-header { padding: 15px 20px 12px; display: flex; align-items: flex-start; gap: 12px; }
-  .step-meta { flex: 1; min-width: 0; }
-  .step-phase { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 4px; }
-  .step-title { font-size: 14px; font-weight: 600; letter-spacing: -0.016em; margin-bottom: 4px; }
-  .step-sub { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
-
-  .badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
-  .badge-opt { background: rgba(255,149,0,0.12); color: var(--accent-orange); border: 1px solid rgba(255,149,0,0.22); }
-  .badge-key { background: rgba(255,59,48,0.12); color: var(--accent-red); border: 1px solid rgba(255,59,48,0.22); }
-
-  .expand-hint { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-tertiary); padding: 0 20px 12px; display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
-  .expand-arrow { display: inline-block; transition: transform 0.25s ease; font-size: 9px; }
-  .step-card.active .expand-arrow { transform: rotate(90deg); }
-  .step-card:hover .expand-hint { color: rgba(255,255,255,0.45); }
-
-  .step-detail { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease; }
-  .step-detail.open { max-height: 500px; opacity: 1; }
-  .step-detail-inner { padding: 0 20px 18px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px; }
-
-  .detail-note { font-size: 12px; color: var(--text-tertiary); line-height: 1.65; font-style: italic; padding: 10px 13px; border-radius: 9px; background: rgba(255,255,255,0.02); border-left: 2px solid rgba(255,255,255,0.09); }
-
-  .flow-legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 28px; align-items: center; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: var(--text-tertiary); }
-  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .legend-dash { width: 14px; height: 1.5px; background: repeating-linear-gradient(to right, rgba(255,149,0,0.6) 0, rgba(255,149,0,0.6) 3px, transparent 3px, transparent 6px); flex-shrink: 0; }
-
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
-
-  .doc-card { border-radius: 14px; padding: 20px 22px; border: 1px solid var(--border); background: rgba(255,255,255,0.025); transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
-  .doc-card:hover { background: rgba(255,255,255,0.05); border-color: var(--border-strong); }
-  .doc-card-icon { font-size: 22px; margin-bottom: 10px; }
-  .doc-card-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.015em; }
-  .doc-card-body { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
-
-  .tool-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-
-  .qa-list { display: flex; flex-direction: column; gap: 4px; }
-  .qa-item { border-radius: 12px; overflow: hidden; }
-  .qa-question { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; cursor: pointer; user-select: none; font-size: 14px; font-weight: 500; color: var(--text-primary); letter-spacing: -0.015em; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; transition: all 0.2s; }
-  .qa-question:hover { background: rgba(255,255,255,0.055); border-color: var(--border-strong); }
-  .qa-question.open { border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
-  .qa-arrow { font-size: 10px; color: var(--text-tertiary); transition: transform 0.25s ease; flex-shrink: 0; }
-  .qa-question.open .qa-arrow { transform: rotate(90deg); }
-  .qa-answer { overflow: hidden; max-height: 0; opacity: 0; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; }
-  .qa-answer.open { max-height: 400px; opacity: 1; }
-  .qa-answer-inner { padding: 14px 18px; font-size: 13px; color: var(--text-secondary); line-height: 1.65; letter-spacing: -0.01em; }
-
-  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 620px) { .team-grid { grid-template-columns: 1fr; } }
-  .team-card { border-radius: 14px; padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; border: 1px solid; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
-  .team-card:hover { filter: brightness(1.15); }
-  .team-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-  .team-name { font-size: 14px; font-weight: 600; margin-bottom: 3px; letter-spacing: -0.015em; }
-  .team-tl { font-size: 12px; color: var(--text-tertiary); }
-
+  /* ─── DIVIDER ─── */
   .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0 32px; }
-
-  @media (max-width: 600px) {
-    .step-row { grid-template-columns: 44px 1fr; }
-    .spine-node { width: 30px; height: 30px; font-size: 11px; margin-top: 18px; }
-    .step-card { margin-left: 10px; }
-  }
 </style>
 </head>
 <body>
 <div class="noise"></div>
 <div class="page-wrapper">
 
+  <!-- ══ PAGE HEADER ══ -->
   <div class="page-header reveal">
-    <p class="label">Catalog Core · Guía interna</p>
-    <h1>Forma de trabajar</h1>
-    <p>Flujos de trabajo, documentación, roadmaps y uso de IA · Roles y preguntas frecuentes</p>
+    <p class="label">Grid-Core · Product Review</p>
+    <h1>Situación actual y próximos pasos</h1>
   </div>
 
+  <!-- ══ INTRO ══ -->
+  <div class="intro-block reveal">
+    <p>Introducción pendiente de redactar.</p>
+  </div>
+
+  <!-- ══ SECCIÓN 1 ══ -->
   <div class="section-block reveal">
     <div class="section-header">
       <div class="section-accent" style="background:var(--accent-blue)"></div>
       <div>
-        <div class="section-title">Flujos de trabajo</div>
-        <div class="section-desc">Del problema al backlog validado · Click en cada fase para ver el detalle</div>
+        <div class="section-title">Análisis de la situación actual</div>
+        <div class="section-desc">Dónde estamos hoy · Contexto y estado del arte</div>
       </div>
     </div>
-
-    <div class="flow-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent-blue)"></div>Fase estándar</div>
-      <div class="legend-item"><div class="legend-dash"></div>Fase opcional</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--accent-red)"></div>Fase crítica</div>
-    </div>
-
-    <div class="flow">
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-1" style="background:rgba(0,122,255,0.12);border-color:rgba(0,122,255,0.45);color:var(--accent-blue)" onclick="toggleStep(1)">1</div>
-          <div class="spine-seg spine-seg-solid"></div>
-        </div>
-        <div class="step-card" id="card-1" onclick="toggleStep(1)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-blue)">Fase 1</div>
-              <div class="step-title">Recoger la necesidad</div>
-              <div class="step-sub">Entender el problema, contexto y causa raíz antes de proponer nada.</div>
-            </div>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-1">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-blue">&#128196; Documento de Discovery</span>
-                <span class="art art-cyan">&#127919; Iniciativa en Jira</span>
-              </div>
-              <div class="detail-note">Crear un documento de Discovery o volcarlo en una iniciativa de Jira. Debe recoger el problema, el contexto y la causa raíz con claridad suficiente para trabajar sobre ella.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-2" style="background:rgba(255,149,0,0.1);border-color:rgba(255,149,0,0.4);color:var(--accent-orange);border-style:dashed" onclick="toggleStep(2)">2</div>
-          <div class="spine-seg spine-seg-dashed"></div>
-        </div>
-        <div class="step-card" id="card-2" onclick="toggleStep(2)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-orange)">Fase 2 · Opcional</div>
-              <div class="step-title">Compartir con PO / UPO</div>
-              <div class="step-sub">Si la necesidad es relevante, alinear antes de proponer soluciones.</div>
-            </div>
-            <span class="badge badge-opt">Opcional</span>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-2">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-orange">&#128197; Catch-up con UPO / PO</span>
-              </div>
-              <div class="detail-note">Puede resolverse en un catch-up regular. El objetivo es validar que el problema identificado es el correcto y que merece inversión antes de avanzar.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-3" style="background:rgba(90,200,250,0.12);border-color:rgba(90,200,250,0.45);color:var(--accent-cyan)" onclick="toggleStep(3)">3</div>
-          <div class="spine-seg spine-seg-solid"></div>
-        </div>
-        <div class="step-card" id="card-3" onclick="toggleStep(3)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-cyan)">Fase 3</div>
-              <div class="step-title">Propuesta de solución</div>
-              <div class="step-sub">Diseñar la solución. Compartir con UPO o PO si el problema es relevante.</div>
-            </div>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-3">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-cyan">&#127912; Diseño / propuesta</span>
-                <span class="art art-orange">&#128172; Feedback UPO / PO</span>
-              </div>
-              <div class="detail-note">Si el problema tiene suficiente relevancia, la propuesta debe compartirse con el UPO o PO antes de continuar. Su feedback en este punto evita retrabajo en fases posteriores.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-4" style="background:rgba(191,90,242,0.12);border-color:rgba(191,90,242,0.45);color:var(--accent-purple)" onclick="toggleStep(4)">4</div>
-          <div class="spine-seg spine-seg-solid"></div>
-        </div>
-        <div class="step-card" id="card-4" onclick="toggleStep(4)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-purple)">Fase 4</div>
-              <div class="step-title">Validar la propuesta</div>
-              <div class="step-sub">Con el equipo y stakeholders implicados. Product Review si es relevante.</div>
-            </div>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-4">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-purple">&#128269; Product Review</span>
-                <span class="art art-cyan">&#128101; Stakeholders implicados</span>
-              </div>
-              <div class="detail-note">Si el problema es relevante, es necesaria una Product Review con todos los implicados. El objetivo es alinear y obtener el "ok" formal antes de ejecutar.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-5" style="background:rgba(52,199,89,0.12);border-color:rgba(52,199,89,0.45);color:var(--accent-green)" onclick="toggleStep(5)">5</div>
-          <div class="spine-seg spine-seg-solid"></div>
-        </div>
-        <div class="step-card" id="card-5" onclick="toggleStep(5)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-green)">Fase 5</div>
-              <div class="step-title">Crear backlog funcional</div>
-              <div class="step-sub">Siempre con priorización orientada a validar la hipótesis de forma temprana.</div>
-            </div>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-5">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-green">&#128203; Backlog en Jira</span>
-                <span class="art art-yellow">&#9889; Priorización explícita</span>
-                <span class="art art-green">&#129514; Validación temprana de hipótesis</span>
-              </div>
-              <div class="detail-note">El backlog siempre debe incluir una priorización explícita y estar orientado a validar la hipótesis lo antes posible. Primero lo que permite aprender, luego lo que permite escalar.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-6" style="background:rgba(255,59,48,0.12);border-color:rgba(255,59,48,0.5);color:var(--accent-red)" onclick="toggleStep(6)">6</div>
-          <div class="spine-seg spine-seg-solid" style="background:linear-gradient(to bottom,rgba(255,59,48,0.2),rgba(255,214,10,0.12))"></div>
-        </div>
-        <div class="step-card" id="card-6" onclick="toggleStep(6)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-red)">Fase 6 · Crítica</div>
-              <div class="step-title">Validar la funcionalidad</div>
-              <div class="step-sub">Comprobar que lo construido resuelve realmente el problema identificado.</div>
-            </div>
-            <span class="badge badge-key">&#128273; Crítica</span>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-6">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-red">&#9989; Validación funcional</span>
-                <span class="art art-orange">&#128202; Contraste con KPIs del Discovery</span>
-              </div>
-              <div class="detail-note">Fase fundamental. No se puede cerrar una iniciativa sin validar que la funcionalidad entregada cumple lo definido. Hay que contrastar con los KPIs e hipótesis recogidos en el Discovery.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-row">
-        <div class="spine">
-          <div class="spine-node" id="node-7" style="background:rgba(255,214,10,0.12);border-color:rgba(255,214,10,0.45);color:var(--accent-yellow)" onclick="toggleStep(7)">7</div>
-        </div>
-        <div class="step-card" id="card-7" onclick="toggleStep(7)">
-          <div class="step-header">
-            <div class="step-meta">
-              <div class="step-phase" style="color:var(--accent-yellow)">Fase 7</div>
-              <div class="step-title">Documentar funcionalmente</div>
-              <div class="step-sub">Dejar traza permanente del proceso, decisiones y resultado.</div>
-            </div>
-          </div>
-          <div class="expand-hint"><span class="expand-arrow">&#9654;</span> Ver detalle</div>
-          <div class="step-detail" id="detail-7">
-            <div class="step-detail-inner">
-              <div class="artifacts">
-                <span class="art art-yellow">&#128218; InditexDocs (EasyDocs)</span>
-              </div>
-              <div class="detail-note">La documentación funcional final queda en InditexDocs (EasyDocs): qué se construyó, por qué, qué decisiones se tomaron y cuál fue el resultado. Es el repositorio permanente del equipo.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div class="empty-state">
+      <span class="empty-state-icon">&#128196;</span>
+      <span class="empty-state-text">Contenido pendiente de añadir.</span>
     </div>
   </div>
 
+  <!-- ══ SECCIÓN 2 ══ -->
   <div class="section-block reveal">
     <div class="section-header">
       <div class="section-accent" style="background:var(--accent-cyan)"></div>
       <div>
-        <div class="section-title">Documentación</div>
-        <div class="section-desc">Dónde vive cada tipo de documento</div>
+        <div class="section-title">Funcionalidades cruzadas</div>
+        <div class="section-desc">Dependencias e iniciativas compartidas con otros equipos</div>
       </div>
     </div>
-    <div class="two-col">
-      <div class="doc-card">
-        <div class="doc-card-icon">&#128260;</div>
-        <div class="doc-card-title">Documentación operativa</div>
-        <div class="doc-card-body">Todo lo que cambia con frecuencia o es de uso diario va en <strong style="color:var(--text-primary)">Loop</strong>. Acceso rápido, edición colaborativa en tiempo real.</div>
-        <div style="margin-top:12px"><span class="pill pill-cyan">Loop</span></div>
-      </div>
-      <div class="doc-card">
-        <div class="doc-card-icon">&#128196;</div>
-        <div class="doc-card-title">Documentación con mayor tiempo de vida</div>
-        <div class="doc-card-body">Decisiones, diseños y documentos de referencia que perduran van en <strong style="color:var(--text-primary)">InditexDocs (EasyDocs)</strong>.</div>
-        <div style="margin-top:12px"><span class="pill pill-blue">InditexDocs · EasyDocs</span></div>
-      </div>
+    <div class="empty-state">
+      <span class="empty-state-icon">&#128101;</span>
+      <span class="empty-state-text">Contenido pendiente de añadir.</span>
     </div>
   </div>
 
+  <!-- ══ SECCIÓN 3 ══ -->
   <div class="section-block reveal">
     <div class="section-header">
       <div class="section-accent" style="background:var(--accent-purple)"></div>
       <div>
-        <div class="section-title">Roadmaps</div>
-        <div class="section-desc">El estado del trabajo del equipo debe reflejarse en Jira</div>
+        <div class="section-title">Premisas para la solución</div>
+        <div class="section-desc">Principios y restricciones que guían las decisiones de diseño</div>
       </div>
     </div>
-    <div class="doc-card" style="max-width:560px">
-      <div class="doc-card-icon">&#128506;&#65039;</div>
-      <div class="doc-card-title">Jira representa la realidad</div>
-      <div class="doc-card-body">Jira debe ser siempre un reflejo fiel del trabajo real del equipo. Si algo está en curso, bloqueado o terminado, tiene que verse en el board.</div>
-      <div style="margin-top:12px"><span class="pill pill-purple">Jira</span></div>
+    <div class="empty-state">
+      <span class="empty-state-icon">&#128161;</span>
+      <span class="empty-state-text">Contenido pendiente de añadir.</span>
     </div>
   </div>
 
+  <!-- ══ SECCIÓN 4 ══ -->
   <div class="section-block reveal">
     <div class="section-header">
       <div class="section-accent" style="background:var(--accent-green)"></div>
       <div>
-        <div class="section-title">Uso de IA</div>
-        <div class="section-desc">Trabajar con IA acelera el equipo significativamente</div>
+        <div class="section-title">Hoja de ruta</div>
+        <div class="section-desc">Próximos pasos, priorización y milestones</div>
       </div>
     </div>
-    <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;max-width:680px;">
-      Debemos trabajar con IA usando los diferentes modelos a través de <strong style="color:var(--text-primary)">Visual Studio</strong> para crear backlog, documentar decisiones, hacer presentaciones, etc. Es mucho más rápido.
-    </p>
-    <div class="tool-row">
-      <span class="pill pill-green">Crear backlog</span>
-      <span class="pill pill-blue">Documentar decisiones</span>
-      <span class="pill pill-orange">Presentaciones</span>
-      <span class="pill pill-cyan">Visual Studio Code</span>
+    <div class="empty-state">
+      <span class="empty-state-icon">&#128506;</span>
+      <span class="empty-state-text">Contenido pendiente de añadir.</span>
     </div>
   </div>
 
-  <hr class="divider">
-
-  <div class="section-label-row reveal">
-    <p class="label">1 — Sobre los roles</p>
-  </div>
-
-  <div class="section-block reveal">
-    <div class="section-header">
-      <div class="section-accent" style="background:var(--accent-orange)"></div>
-      <div>
-        <div class="section-title">Preguntas frecuentes · Roles</div>
-        <div class="section-desc">PA, PO, UPO · ¿Qué se espera de mí?</div>
-      </div>
-    </div>
-
-    <div class="qa-list">
-
-      <div class="qa-item">
-        <div class="qa-question" onclick="toggleQA(this)">
-          ¿Sigue existiendo el rol de PA?
-          <span class="qa-arrow">&#9654;</span>
-        </div>
-        <div class="qa-answer">
-          <div class="qa-answer-inner">
-            En el caso de <strong>P. Lifecycle SÍ</strong>; en <strong>P. Findability NO</strong> (PAs &gt; POs). El rol de PO de vertical no ha funcionado en P. Findability por la heterogeneidad de los servicios. Si no se puede crear un servicio único con APIs consolidadas, la visión no es materializable.<br><br>
-            En P. Lifecycle esa visión sí es posible. En un futuro nos cuestionaremos si Ecomlead es realmente plataforma; ahora estamos migrando.
-          </div>
-        </div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-question" onclick="toggleQA(this)">
-          ¿Cuál es la diferencia entre PAs y POs?
-          <span class="qa-arrow">&#9654;</span>
-        </div>
-        <div class="qa-answer">
-          <div class="qa-answer-inner">
-            Los <strong>PAs</strong> pueden contar con el PO en primera instancia.<br>
-            Los <strong>POs</strong> tienen al UPO.
-          </div>
-        </div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-question" onclick="toggleQA(this)">
-          ¿Qué cosas compartir con PO o UPO?
-          <span class="qa-arrow">&#9654;</span>
-        </div>
-        <div class="qa-answer">
-          <div class="qa-answer-inner">
-            Decisiones, priorización, bloqueos, diseños y documentación.<br><br>
-            El PO o UPO, dependiendo del caso, da feedback sobre todo lo anterior. <strong>Debe estar informado.</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="qa-item">
-        <div class="qa-question" onclick="toggleQA(this)">
-          ¿Cómo compartir con PO o UPO?
-          <span class="qa-arrow">&#9654;</span>
-        </div>
-        <div class="qa-answer">
-          <div class="qa-answer-inner">
-            Depende de la naturaleza del problema. El flujo general es:<br><br>
-            <strong>Diseño propuesto</strong> → <strong>Product Review</strong> (antes de verlo con el resto de implicados)<br><br>
-            Para decisiones relevantes: compartir el documento para poder <em>"firmarla"</em>. Aplicar este proceso solo en decisiones muy relevantes — <strong>aplicar sensatez</strong>.
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="section-label-row reveal">
-    <p class="label">2 — Sobre los cambios en la unidad</p>
-  </div>
-
-  <div class="section-block reveal">
-    <div class="section-header">
-      <div class="section-accent" style="background:var(--accent-red)"></div>
-      <div>
-        <div class="section-title">Cambios de estructura</div>
-        <div class="section-desc">Reorganización de equipos dentro de Catalog Core</div>
-      </div>
-    </div>
-
-    <div class="team-grid">
-      <div class="team-card" style="background:rgba(90,200,250,0.05);border-color:rgba(90,200,250,0.2)">
-        <div class="team-dot" style="background:var(--accent-cyan)"></div>
-        <div>
-          <div class="team-name">Navigation + Feedex</div>
-          <div class="team-tl">TL · <strong style="color:var(--text-secondary)">Joaquín</strong></div>
-          <div style="margin-top:10px"><span class="pill pill-cyan">Consolidación</span></div>
-          <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px;line-height:1.5;">El equipo de Feedex se consolida con el equipo de Navigation.</div>
-        </div>
-      </div>
-      <div class="team-card" style="background:rgba(52,199,89,0.05);border-color:rgba(52,199,89,0.2)">
-        <div class="team-dot" style="background:var(--accent-green)"></div>
-        <div>
-          <div class="team-name">Grids + KPIs</div>
-          <div class="team-tl">TL · <strong style="color:var(--text-secondary)">Iván</strong></div>
-          <div style="margin-top:10px"><span class="pill pill-green">Unificación</span></div>
-          <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px;line-height:1.5;">Grids y KPIs formarán un único equipo.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <!-- FOOTER -->
   <div style="text-align:center;padding-top:40px;border-top:1px solid var(--border)">
-    <p style="font-size:12px;color:var(--text-tertiary)">Catalog Core · Guía de forma de trabajo</p>
+    <p style="font-size:12px;color:var(--text-tertiary)">Grid-Core · Product Review &middot; <a href="/product-reviews/" style="color:var(--text-tertiary);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Volver a Product Reviews</a></p>
   </div>
 
 </div>
@@ -586,34 +206,8 @@
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  const openSteps = new Set();
-  function toggleStep(n) {
-    const detail = document.getElementById('detail-' + n);
-    const card   = document.getElementById('card-' + n);
-    const node   = document.getElementById('node-' + n);
-    const isOpen = openSteps.has(n);
-    if (isOpen) {
-      detail.classList.remove('open');
-      card.classList.remove('active');
-      openSteps.delete(n);
-      gsap.to(node, { scale: 1, duration: 0.25, ease: 'back.out(2)' });
-    } else {
-      detail.classList.add('open');
-      card.classList.add('active');
-      openSteps.add(n);
-      gsap.fromTo(node, { scale: 0.85 }, { scale: 1.08, duration: 0.15, ease: 'power2.out',
-        onComplete: () => gsap.to(node, { scale: 1, duration: 0.25, ease: 'back.out(3)' }) });
-    }
-  }
-
-  function toggleQA(questionEl) {
-    const answer = questionEl.nextElementSibling;
-    const isOpen = answer.classList.contains('open');
-    answer.classList.toggle('open', !isOpen);
-    questionEl.classList.toggle('open', !isOpen);
-  }
-
   gsap.fromTo('.page-header', { opacity:0, y:20 }, { opacity:1, y:0, duration:0.8, ease:'power3.out' });
+  gsap.fromTo('.intro-block', { opacity:0, y:16 }, { opacity:1, y:0, duration:0.7, ease:'power3.out', delay:0.15 });
 
   document.querySelectorAll('.reveal').forEach((el, i) => {
     gsap.fromTo(el,
@@ -623,28 +217,6 @@
         delay: 0.04 * (i % 4)
       }
     );
-  });
-
-  document.querySelectorAll('.step-card').forEach((card, i) => {
-    gsap.fromTo(card,
-      { opacity: 0, x: 18 },
-      { opacity: 1, x: 0, duration: 0.55, ease: 'power3.out', delay: i * 0.055,
-        scrollTrigger: { trigger: card, start: 'top 93%', toggleActions: 'play none none reverse' }
-      }
-    );
-  });
-
-  document.querySelectorAll('.spine-node').forEach((node, i) => {
-    gsap.fromTo(node,
-      { opacity: 0, scale: 0.4 },
-      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2.5)', delay: i * 0.055 + 0.07,
-        scrollTrigger: { trigger: node, start: 'top 93%', toggleActions: 'play none none reverse' } }
-    );
-  });
-
-  document.querySelectorAll('.doc-card, .team-card').forEach(card => {
-    card.addEventListener('mouseenter', () => gsap.to(card, { scale: 1.015, duration: 0.28, ease: 'power2.out' }));
-    card.addEventListener('mouseleave', () => gsap.to(card, { scale: 1, duration: 0.28, ease: 'power2.out' }));
   });
 </script>
 </body>
