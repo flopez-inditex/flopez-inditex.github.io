@@ -190,6 +190,10 @@
   .conflict-table tbody tr.empty-row td {
     height: 44px;
     border-top: 1px dashed rgba(255,255,255,0.05);
+    color: var(--text-tertiary);
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.1em;
   }
   .conflict-tag {
     display: inline-block;
@@ -201,6 +205,44 @@
     font-size: 11px;
     font-weight: 600;
     white-space: nowrap;
+  }
+
+  /* ─── PREMISE CARDS ─── */
+  .premise-group { display: flex; flex-direction: column; gap: 20px; }
+  .premise-group + .premise-group { margin-top: 20px; }
+
+  .premise-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  .premise-card {
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    padding: 16px 20px;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .premise-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.13); }
+
+  .premise-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .premise-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    background: var(--accent-purple);
+    box-shadow: 0 0 6px rgba(191,90,242,0.5);
+  }
+  .premise-title { font-size: 13px; font-weight: 600; letter-spacing: -0.014em; color: var(--text-primary); }
+  .premise-body { font-size: 12px; color: var(--text-secondary); line-height: 1.65; padding-left: 17px; }
+
+  .premise-section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 22px 0;
   }
 
   /* ─── PILLS ─── */
@@ -332,9 +374,9 @@
             <td>Degradación de la limpieza visual de la parrilla y violación de las reglas de negocio automáticas.</td>
           </tr>
           <tr class="empty-row">
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>&hellip;</td>
+            <td>&hellip;</td>
+            <td>&hellip;</td>
           </tr>
         </tbody>
       </table>
@@ -347,13 +389,61 @@
       <div class="section-accent" style="background:var(--accent-purple)"></div>
       <div>
         <div class="section-title">Premisas para la solución</div>
-        <div class="section-desc">Principios y restricciones que guían las decisiones de diseño</div>
+        <div class="section-desc">Principios y restricciones que guíarán el diseño de la solución</div>
       </div>
     </div>
-    <div class="empty-state">
-      <span class="empty-state-icon">&#128161;</span>
-      <span class="empty-state-text">Contenido pendiente de añadir.</span>
+
+    <div class="premise-group">
+      <p class="premise-group-label">Rediseño Arquitectónico</p>
+      <div class="premise-card">
+        <div class="premise-card-header">
+          <span class="premise-dot"></span>
+          <span class="premise-title">Nueva API V2</span>
+        </div>
+        <p class="premise-body">Simplificación y rediseño integral de la API, priorizando la escalabilidad y una estructura lo suficientemente genérica para absorber evoluciones futuras.</p>
+      </div>
     </div>
+
+    <hr class="premise-section-divider">
+
+    <div class="premise-group">
+      <p class="premise-group-label">Optimización y Limpieza</p>
+      <div class="premise-card">
+        <div class="premise-card-header">
+          <span class="premise-dot"></span>
+          <span class="premise-title">Auditoría de Funcionalidades</span>
+        </div>
+        <p class="premise-body">Identificar y eliminar aquellas capacidades que no se utilizan actualmente para reducir la superficie de mantenimiento en la V2.</p>
+      </div>
+      <div class="premise-card">
+        <div class="premise-card-header">
+          <span class="premise-dot"></span>
+          <span class="premise-title">Validación de la Configuración de las Parrillas</span>
+        </div>
+        <p class="premise-body">Implementar validaciones en el guardado para asegurar la correcta construcción de las parrillas. Nuestros stakeholders deberán adaptarse a estos nuevos contratos de validación.</p>
+      </div>
+    </div>
+
+    <hr class="premise-section-divider">
+
+    <div class="premise-group">
+      <p class="premise-group-label">Posibles enfoques de diseño para la evolución del sistema</p>
+      <div class="premise-card">
+        <div class="premise-card-header">
+          <span class="premise-dot"></span>
+          <span class="premise-title">Pipeline de Pasos Dinámico</span>
+        </div>
+        <p class="premise-body">Implementar un motor de reglas donde no solo se definan las lógicas a aplicar, sino también el orden de ejecución de estas (orquestación dinámica).</p>
+      </div>
+      <div class="premise-card">
+        <div class="premise-card-header">
+          <span class="premise-dot"></span>
+          <span class="premise-title">Evolución del Modelo de Datos</span>
+        </div>
+        <p class="premise-body">Evaluar la reutilización de las CommercialSettings o la creación de un nuevo modelo/colección en la base de datos que soporte de forma nativa estas nuevas jerarquías de reglas.</p>
+      </div>
+    </div>
+
   </div>
 
   <!-- ══ SECCIÓN 4 ══ -->
