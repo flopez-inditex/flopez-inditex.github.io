@@ -103,7 +103,7 @@
     border-bottom: 1px solid var(--border);
   }
 
-  /* ─── ISSUE CARDS ─── */
+  /* ─── ISSUE / PREMISE CARDS (shared) ─── */
   .issue-list { display: flex; flex-direction: column; gap: 14px; }
 
   .issue-card {
@@ -207,9 +207,8 @@
     white-space: nowrap;
   }
 
-  /* ─── PREMISE CARDS ─── */
-  .premise-group { display: flex; flex-direction: column; gap: 20px; }
-  .premise-group + .premise-group { margin-top: 20px; }
+  /* ─── PREMISE GROUPS ─── */
+  .premise-group { display: flex; flex-direction: column; gap: 12px; }
 
   .premise-group-label {
     font-size: 10px;
@@ -217,27 +216,8 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-tertiary);
-    margin-bottom: 10px;
     padding-left: 2px;
   }
-
-  .premise-card {
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.02);
-    padding: 16px 20px;
-    transition: border-color 0.25s, background 0.25s;
-  }
-  .premise-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.13); }
-
-  .premise-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
-  .premise-dot {
-    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-    background: var(--accent-purple);
-    box-shadow: 0 0 6px rgba(191,90,242,0.5);
-  }
-  .premise-title { font-size: 13px; font-weight: 600; letter-spacing: -0.014em; color: var(--text-primary); }
-  .premise-body { font-size: 12px; color: var(--text-secondary); line-height: 1.65; padding-left: 17px; }
 
   .premise-section-divider {
     border: none;
@@ -265,7 +245,6 @@
     align-items: center;
     position: relative;
   }
-  /* horizontal connector line between items */
   .timeline-item:not(:last-child)::after {
     content: '';
     position: absolute;
@@ -455,12 +434,12 @@
 
     <div class="premise-group">
       <p class="premise-group-label">Rediseño Arquitectónico</p>
-      <div class="premise-card">
-        <div class="premise-card-header">
-          <span class="premise-dot"></span>
-          <span class="premise-title">Nueva API V2</span>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#9889;&#65039;</span>
+          <span class="issue-title">Nueva API V2</span>
         </div>
-        <p class="premise-body">Simplificación y rediseño integral de la API, priorizando la escalabilidad y una estructura lo suficientemente genérica para absorber evoluciones futuras.</p>
+        <p class="issue-body">Simplificación y rediseño integral de la API, priorizando la escalabilidad y una estructura lo suficientemente genérica para absorber evoluciones futuras.</p>
       </div>
     </div>
 
@@ -468,19 +447,19 @@
 
     <div class="premise-group">
       <p class="premise-group-label">Optimización y Limpieza</p>
-      <div class="premise-card">
-        <div class="premise-card-header">
-          <span class="premise-dot"></span>
-          <span class="premise-title">Auditoría de Funcionalidades</span>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128269;</span>
+          <span class="issue-title">Auditoría de Funcionalidades</span>
         </div>
-        <p class="premise-body">Identificar y eliminar aquellas capacidades que no se utilizan actualmente para reducir la superficie de mantenimiento en la V2.</p>
+        <p class="issue-body">Identificar y eliminar aquellas capacidades que no se utilizan actualmente para reducir la superficie de mantenimiento en la V2.</p>
       </div>
-      <div class="premise-card">
-        <div class="premise-card-header">
-          <span class="premise-dot"></span>
-          <span class="premise-title">Validación de la Configuración de las Parrillas</span>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128737;&#65039;</span>
+          <span class="issue-title">Validación de la Configuración de las Parrillas</span>
         </div>
-        <p class="premise-body">Implementar validaciones en el guardado para asegurar la correcta construcción de las parrillas. Nuestros stakeholders deberán adaptarse a estos nuevos contratos de validación.</p>
+        <p class="issue-body">Implementar validaciones en el guardado para asegurar la correcta construcción de las parrillas. Nuestros stakeholders deberán adaptarse a estos nuevos contratos de validación.</p>
       </div>
     </div>
 
@@ -488,19 +467,19 @@
 
     <div class="premise-group">
       <p class="premise-group-label">Posibles enfoques de diseño para la evolución del sistema</p>
-      <div class="premise-card">
-        <div class="premise-card-header">
-          <span class="premise-dot"></span>
-          <span class="premise-title">Pipeline de Pasos Dinámico</span>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#9881;&#65039;</span>
+          <span class="issue-title">Pipeline de Pasos Dinámico</span>
         </div>
-        <p class="premise-body">Implementar un motor de reglas donde no solo se definan las lógicas a aplicar, sino también el orden de ejecución de estas (orquestación dinámica).</p>
+        <p class="issue-body">Implementar un motor de reglas donde no solo se definan las lógicas a aplicar, sino también el orden de ejecución de estas (orquestación dinámica).</p>
       </div>
-      <div class="premise-card">
-        <div class="premise-card-header">
-          <span class="premise-dot"></span>
-          <span class="premise-title">Evolución del Modelo de Datos</span>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128452;&#65039;</span>
+          <span class="issue-title">Evolución del Modelo de Datos</span>
         </div>
-        <p class="premise-body">Evaluar la reutilización de las CommercialSettings o la creación de un nuevo modelo/colección en la base de datos que soporte de forma nativa estas nuevas jerarquías de reglas.</p>
+        <p class="issue-body">Evaluar la reutilización de las CommercialSettings o la creación de un nuevo modelo/colección en la base de datos que soporte de forma nativa estas nuevas jerarquías de reglas.</p>
       </div>
     </div>
 
