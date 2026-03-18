@@ -6,7 +6,7 @@
 <title>Grid-Core · Flujo de Atributos MARK</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <style>
@@ -52,7 +52,6 @@
   @media (max-width: 768px) { .page-wrapper { padding: 40px 20px 60px; } }
 
   .label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-tertiary); }
-
   .reveal { opacity: 1; }
 
   /* ─── HEADER ─── */
@@ -116,26 +115,112 @@
   .example-text { font-size: 12px; color: var(--text-tertiary); line-height: 1.6; }
   .example-text strong { color: rgba(255,255,255,0.55); font-weight: 600; }
 
-  /* ─── CONFLICT TABLE ─── */
-  .conflict-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-  .conflict-table { width: 100%; border-collapse: collapse; font-size: 12px; line-height: 1.6; }
-  .conflict-table thead tr { border-bottom: 1px solid rgba(90,200,250,0.2); }
-  .conflict-table th {
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(0,0,0,0.35);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .code-block-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+  }
+  .code-block-lang {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-tertiary);
+  }
+  .code-block pre {
+    padding: 16px 18px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-k  { color: #BF5AF2; }
+  .code-s  { color: #FF9F0A; }
+  .code-n  { color: #5AC8FA; }
+  .code-c  { color: rgba(255,255,255,0.28); font-style: italic; }
+  .code-v  { color: #34C759; }
+  .code-p  { color: rgba(255,255,255,0.45); }
+
+  /* ─── TWO-COL GRID ─── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ─── COMPARISON TABLE ─── */
+  .cmp-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 12px; line-height: 1.6; }
+  .cmp-table thead tr { border-bottom: 1px solid rgba(191,90,242,0.2); }
+  .cmp-table th {
     padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600;
-    letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-cyan);
-    background: rgba(90,200,250,0.04); white-space: nowrap;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-purple);
+    background: rgba(191,90,242,0.04); white-space: nowrap;
   }
-  .conflict-table td { padding: 13px 16px; color: var(--text-secondary); vertical-align: top; border-top: 1px solid var(--border); }
-  .conflict-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
-  .conflict-table tbody tr.empty-row td {
-    height: 44px; border-top: 1px dashed rgba(255,255,255,0.05);
-    color: var(--text-tertiary); font-size: 12px; text-align: center; letter-spacing: 0.1em;
+  .cmp-table td { padding: 13px 16px; color: var(--text-secondary); vertical-align: top; border-top: 1px solid var(--border); }
+  .cmp-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ─── ACCEPTANCE CASES ─── */
+  .ac-list { display: flex; flex-direction: column; gap: 14px; }
+  .ac-card {
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    padding: 18px 20px;
+    transition: border-color 0.25s, background 0.25s;
   }
-  .conflict-tag {
-    display: inline-block; padding: 3px 9px; border-radius: 8px;
-    background: rgba(90,200,250,0.1); border: 1px solid rgba(90,200,250,0.2);
-    color: var(--accent-cyan); font-size: 11px; font-weight: 600; white-space: nowrap;
+  .ac-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.13); }
+  .ac-card-title {
+    font-size: 13px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
   }
+  .ac-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 6px;
+    background: rgba(52,199,89,0.12); border: 1px solid rgba(52,199,89,0.25);
+    color: var(--accent-green); font-size: 10px; font-weight: 700; flex-shrink: 0;
+  }
+  .ac-row {
+    display: flex; gap: 10px; align-items: baseline;
+    padding: 7px 0; border-top: 1px solid rgba(255,255,255,0.04);
+    font-size: 12px; color: var(--text-secondary); line-height: 1.6;
+  }
+  .ac-row:first-of-type { border-top: none; padding-top: 0; }
+  .ac-key {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    flex-shrink: 0; width: 64px; padding-top: 1px;
+  }
+  .ac-key.dado  { color: var(--accent-cyan); }
+  .ac-key.cuando { color: var(--accent-orange); }
+  .ac-key.entonces { color: var(--accent-green); }
+
+  /* ─── INLINE CODE ─── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    padding: 1px 6px;
+    color: var(--accent-cyan);
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-radius: 12px;
+    border: 1px solid rgba(255,149,0,0.2);
+    background: rgba(255,149,0,0.05);
+    padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { font-size: 12px; color: var(--text-secondary); line-height: 1.65; }
+  .callout-body strong { color: var(--accent-orange); font-weight: 600; }
 
   /* ─── PREMISE GROUPS ─── */
   .premise-group { display: flex; flex-direction: column; gap: 12px; }
@@ -144,112 +229,6 @@
     text-transform: uppercase; color: var(--text-tertiary); padding-left: 2px;
   }
   .premise-section-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
-
-  /* ─── HORIZONTAL TIMELINE ─── */
-  .timeline-wrap {
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.08) transparent;
-  }
-  .timeline-wrap::-webkit-scrollbar { height: 4px; }
-  .timeline-wrap::-webkit-scrollbar-track { background: transparent; }
-  .timeline-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
-
-  .timeline {
-    display: flex;
-    gap: 10px;
-    min-width: 600px;
-    position: relative;
-    padding-top: 4px;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    right: 24px;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      rgba(52,199,89,0.7) 0%,
-      rgba(52,199,89,0.5) 33%,
-      rgba(52,199,89,0.25) 66%,
-      rgba(52,199,89,0.08) 100%
-    );
-    z-index: 0;
-  }
-
-  .timeline-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
-
-  .timeline-node {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(52,199,89,0.08);
-    border: 1.5px solid rgba(52,199,89,0.3);
-    color: var(--accent-green);
-    font-size: 14px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-    flex-shrink: 0;
-    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-  }
-  .timeline-item:hover .timeline-node {
-    background: rgba(52,199,89,0.16);
-    border-color: rgba(52,199,89,0.65);
-    box-shadow: 0 0 18px rgba(52,199,89,0.22), 0 0 6px rgba(52,199,89,0.15);
-  }
-
-  .timeline-stem {
-    width: 1px;
-    height: 14px;
-    background: linear-gradient(to bottom, rgba(52,199,89,0.3), rgba(52,199,89,0.05));
-    flex-shrink: 0;
-  }
-
-  .timeline-card {
-    width: 100%;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.02);
-    padding: 14px 14px 16px;
-    text-align: center;
-    transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
-  }
-  .timeline-item:hover .timeline-card {
-    background: rgba(255,255,255,0.04);
-    border-color: rgba(52,199,89,0.18);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  }
-
-  .timeline-phase {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent-green);
-    opacity: 0.7;
-    margin-bottom: 6px;
-  }
-
-  .timeline-card-text {
-    font-size: 11.5px;
-    color: var(--text-secondary);
-    line-height: 1.65;
-  }
 
   /* ─── PILLS ─── */
   .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
@@ -261,35 +240,272 @@
   .pill-purple { background: rgba(191,90,242,0.15); color: #BF5AF2; border: 1px solid rgba(191,90,242,0.2); }
   .pill-yellow { background: rgba(255,214,10,0.15); color: #FFD60A; border: 1px solid rgba(255,214,10,0.2); }
   .pill-grey   { background: rgba(255,255,255,0.06); color: var(--text-tertiary); border: 1px solid var(--border); }
-
-  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0 32px; }
 </style>
 </head>
 <body>
 <div class="noise"></div>
 <div class="page-wrapper">
 
-  <!-- ══ PAGE HEADER ══ -->
+  <!-- ══ HEADER ══ -->
   <div class="page-header reveal">
     <p class="label">Grid-Core · Product Review</p>
     <h1>Flujo de Atributos MARK</h1>
+    <p>Reimplementación del flujo de atributos MARK para permitir su explotación libre como tag lógico en queries de grid y secciones.</p>
   </div>
 
-  <!-- ══ SECCIÓN PLACEHOLDER ══ -->
+  <!-- ══ SECCIÓN 1 — CONTEXTO ══ -->
   <div class="section-block reveal">
     <div class="section-header">
       <div class="section-accent" style="background:var(--accent-blue)"></div>
       <div>
-        <div class="section-title">Contenido pendiente</div>
-        <div class="section-desc">Las secciones de este documento están por definir</div>
+        <div class="section-title">Contexto y motivación</div>
+        <div class="section-desc">Por qué se necesita este cambio y de dónde viene la demanda</div>
       </div>
     </div>
-    <p class="content-lead">Este documento está pendiente de redacción. Añade las secciones cuando tengas el contenido listo.</p>
+
+    <p class="content-lead">Desde el equipo de PACMAN se traslada la necesidad de los comerciales de identificar ciertos estilismos como <strong style="color:var(--text-primary)">base de venta</strong> — productos con alta rotación tanto en tienda física como online — con el objetivo de crear secciones personalizadas con ellos. Esta diferenciación debe hacerse a nivel de mercado.</p>
+
+    <div class="issue-list">
+
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128683;</span>
+          <span class="issue-title">¿Por qué no se usan tags?</span>
+        </div>
+        <p class="issue-body">Los <em>tags</em> serían la opción más natural para marcar productos, pero no permiten la granularidad necesaria: no es posible aplicarlos a nivel de mercado. Se descartan como mecanismo para este caso de uso.</p>
+      </div>
+
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#9989;</span>
+          <span class="issue-title">La solución: atributos de tipo MARK</span>
+        </div>
+        <p class="issue-body">Tras un análisis coordinado con PACMAN y Arquitectura, se decidió utilizar los atributos de tipo <code>MARK</code>. Son semánticamente adecuados y permiten la granularidad por mercado requerida. Sin embargo, actualmente existen comportamientos fijos asociados a ciertos subtipos que impiden su explotación libre — por eso es necesario <strong style="color:var(--text-primary)">reimplementar el flujo</strong>.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 2 — SOLUCIÓN TÉCNICA ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-purple)"></div>
+      <div>
+        <div class="section-title">Solución técnica</div>
+        <div class="section-desc">El nuevo flujo y cómo se modela el atributo</div>
+      </div>
+    </div>
+
+    <p class="content-lead">La reimplementación elimina los comportamientos fijos asociados a los subtipos de <code>MARK</code> y expone las marcas como un nuevo <strong style="color:var(--text-primary)">tag lógico</strong> <code>marks</code>, por el que se podrán aplicar condiciones y filtros tanto en la query del grid como en la de las secciones.</p>
+
+    <div class="premise-group">
+      <p class="premise-group-label">Estructura del atributo MARK</p>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128196;</span>
+          <span class="issue-title">Modelo de datos recibido</span>
+        </div>
+        <p class="issue-body">El atributo llega desde el sistema origen con la siguiente estructura. El campo <code>subtype</code> actúa como identificador semántico de la marca (ej. <code>BDV</code>, <code>STYLING_INFO</code>).</p>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">JSON</span></div>
+          <pre><span class="code-p">{</span>
+  <span class="code-k">"type"</span><span class="code-p">:</span> <span class="code-p">{</span> <span class="code-k">"value"</span><span class="code-p">:</span> <span class="code-s">"Mark"</span> <span class="code-p">},</span>
+  <span class="code-k">"subtype"</span><span class="code-p">:</span> <span class="code-p">{</span> <span class="code-k">"value"</span><span class="code-p">:</span> <span class="code-s">"BDV"</span> <span class="code-p">},</span>
+  <span class="code-k">"identifier"</span><span class="code-p">:</span> <span class="code-p">{</span> <span class="code-k">"value"</span><span class="code-p">:</span> <span class="code-s">"BDV"</span> <span class="code-p">},</span>
+  <span class="code-k">"values"</span><span class="code-p">:</span> <span class="code-p">[],</span>
+  <span class="code-k">"properties"</span><span class="code-p">:</span> <span class="code-p">{}</span>
+<span class="code-p">}</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="premise-section-divider">
+
+    <div class="premise-group">
+      <p class="premise-group-label">Nuevo tag lógico</p>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128269;</span>
+          <span class="issue-title">Tag <code>marks</code> en las queries</span>
+        </div>
+        <p class="issue-body">Se crea el tag lógico <code>marks</code> que permite filtrar por el <code>subtype</code> del atributo MARK en cualquier query de grid o sección. El siguiente ejemplo muestra su uso combinado con otros filtros habituales:</p>
+        <div class="code-block">
+          <div class="code-block-header"><span class="code-block-lang">Query DSL</span></div>
+          <pre>NORTH AND (woman OR (man AND Unisex))
+AND <span class="code-v">marks:BDV</span> OR <span class="code-v">marks:BASESTYLE</span>     <span class="code-c">// filtra por mark</span>
+AND (NOT ((accessories) OR (perfumes))
+     AND ((*:* AND NOT availability_status:COMING_SOON)
+     AND (NOT(price_cut:[0.01 TO 1] OR labels:special_price))))
+AND NOT (promotions:SALES**)</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="premise-section-divider">
+
+    <div class="premise-group">
+      <p class="premise-group-label">Comparativa con el flujo anterior</p>
+      <div class="cmp-table-wrap">
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th>Aspecto</th>
+              <th>Flujo anterior</th>
+              <th>Nuevo flujo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Comportamiento del subtipo</td>
+              <td>Fijo, condicionado en el código</td>
+              <td>Libre, sin lógica asociada en el motor</td>
+            </tr>
+            <tr>
+              <td>Forma de explotar la marca</td>
+              <td>Implícita (el sistema reacciona)</td>
+              <td>Explícita vía tag lógico <code>marks:&lt;subtipo&gt;</code></td>
+            </tr>
+            <tr>
+              <td>Granularidad</td>
+              <td>Global</td>
+              <td>Por mercado</td>
+            </tr>
+            <tr>
+              <td>Configuración por PACMAN</td>
+              <td><code>stylings:BASESTYLE</code> (DLS)</td>
+              <td><code>mocacoOutfitSelectionSettings.customizations</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ SECCIÓN 3 — CRITERIOS DE ACEPTACIÓN ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-green)"></div>
+      <div>
+        <div class="section-title">Criterios de aceptación</div>
+        <div class="section-desc">Casos de uso que deben funcionar con el nuevo flujo</div>
+      </div>
+    </div>
+
+    <div class="ac-list">
+
+      <div class="ac-card">
+        <div class="ac-card-title">
+          <span class="ac-badge">1</span>
+          Mark de tipo <code>STYLING_INFO</code> — Estilismo base de venta
+        </div>
+        <div class="ac-row">
+          <span class="ac-key dado">Dado</span>
+          <span>un CC con un atributo <code>type = MARK</code>, <code>subtype = STYLING_INFO</code> e <code>identifier = BASESTYLE</code></span>
+        </div>
+        <div class="ac-row">
+          <span class="ac-key cuando">Cuando</span>
+          <span>se defina una parrilla con el tag lógico <code>marks:BASESTYLE</code></span>
+        </div>
+        <div class="ac-row">
+          <span class="ac-key entonces">Entonces</span>
+          <span>el CC se devuelve en la llamada <code>GetGrid</code> siempre que cumpla el resto de filtros</span>
+        </div>
+      </div>
+
+      <div class="ac-card">
+        <div class="ac-card-title">
+          <span class="ac-badge">2</span>
+          Mark de tipo <code>BDV</code> — Base de venta directa
+        </div>
+        <div class="ac-row">
+          <span class="ac-key dado">Dado</span>
+          <span>un CC con un atributo <code>type = MARK</code>, <code>subtype = BDV</code> e <code>identifier = BDV</code></span>
+        </div>
+        <div class="ac-row">
+          <span class="ac-key cuando">Cuando</span>
+          <span>se defina una parrilla con el tag lógico <code>marks:BDV</code></span>
+        </div>
+        <div class="ac-row">
+          <span class="ac-key entonces">Entonces</span>
+          <span>el CC se devuelve en la llamada <code>GetGrid</code> siempre que cumpla el resto de filtros</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 4 — MIGRACIÓN ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-orange)"></div>
+      <div>
+        <div class="section-title">Migración y coexistencia</div>
+        <div class="section-desc">Impacto en equipos dependientes y plan de transición</div>
+      </div>
+    </div>
+
+    <p class="content-lead">Ambos flujos — el antiguo con comportamientos fijos y el nuevo con el tag lógico <code>marks</code> — deberán <strong style="color:var(--text-primary)">convivir durante un período</strong> hasta completar la migración. Durante ese tiempo el sistema debe ser capaz de procesar los dos modelos sin conflicto.</p>
+
+    <div class="issue-list">
+
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128226;</span>
+          <span class="issue-title">Impacto en PACMAN</span>
+        </div>
+        <p class="issue-body">El equipo de PACMAN deberá adaptar su integración para pasar a usar el nuevo campo de configuración al seleccionar estilismos. El campo anterior usado en el DLS (<code>stylings:BASESTYLE</code>) deberá sustituirse progresivamente.</p>
+        <div class="example-list">
+          <div class="example-item">
+            <span class="example-bullet">Antes</span>
+            <span class="example-text">DLS con <strong>stylings:BASESTYLE</strong></span>
+          </div>
+          <div class="example-item">
+            <span class="example-bullet">Ahora</span>
+            <span class="example-text">Campo <strong>mocacoOutfitSelectionSettings.customizations</strong> para seleccionar el estilismo, lo que permite usar un DLS del tipo <code>marks:BASESTYLE</code></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128274;</span>
+          <span class="issue-title">Contratos de API no afectados</span>
+        </div>
+        <p class="issue-body">Este cambio no altera los contratos existentes de los endpoints principales. Los siguientes elementos permanecen sin cambios:</p>
+        <div class="example-list">
+          <div class="example-item">
+            <span class="example-bullet">&#10003;</span>
+            <span class="example-text"><strong>buildMiniGrid</strong> — sin cambios en el contrato</span>
+          </div>
+          <div class="example-item">
+            <span class="example-bullet">&#10003;</span>
+            <span class="example-text"><strong>getGridFilters</strong> — sin cambios en el contrato</span>
+          </div>
+          <div class="example-item">
+            <span class="example-bullet">&#10003;</span>
+            <span class="example-text"><strong>API de visibilidad</strong> — no afectada</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout" style="margin-top:16px">
+      <span class="callout-icon">&#9888;&#65039;</span>
+      <p class="callout-body"><strong>Acción requerida:</strong> Comunicar a PACMAN que deben migrar su configuración a <code>mocacoOutfitSelectionSettings.customizations</code> para hacer uso del nuevo tag lógico <code>marks</code> antes de que el flujo antiguo sea retirado.</p>
+    </div>
+
   </div>
 
   <!-- FOOTER -->
   <div style="text-align:center;padding-top:40px;border-top:1px solid var(--border)">
-    <p style="font-size:12px;color:var(--text-tertiary)">Grid-Core · Product Review &middot; <a href="/product-reviews/" style="color:var(--text-tertiary);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Volver a Product Reviews</a></p>
+    <p style="font-size:12px;color:var(--text-tertiary)">
+      Grid-Core · Product Review &middot;
+      <a href="https://jira.inditex.com/jira/browse/GRID-4644" target="_blank" rel="noopener" style="color:var(--text-tertiary);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">GRID-4644</a>
+      &middot;
+      <a href="/product-reviews/" style="color:var(--text-tertiary);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.1);">Volver a Product Reviews</a>
+    </p>
   </div>
 
 </div>
