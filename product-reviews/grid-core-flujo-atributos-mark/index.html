@@ -208,7 +208,27 @@
   .code-n  { color: #5AC8FA; }
   .code-c  { color: rgba(255,255,255,0.28); font-style: italic; }
   .code-v  { color: #34C759; }
+  .code-del { color: #FF3B30; }
   .code-p  { color: rgba(255,255,255,0.45); }
+
+  /* ─── DIFF GRID ─── */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+    align-items: start;
+  }
+  @media (max-width: 640px) { .diff-grid { grid-template-columns: 1fr; } }
+  .diff-col-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; padding: 0 2px 6px;
+  }
+  .diff-col-label-before { color: var(--accent-red); }
+  .diff-col-label-after  { color: var(--accent-green); }
+  .diff-grid .code-block { margin-top: 0; }
+  .diff-before .code-block { border-color: rgba(255,59,48,0.2); }
+  .diff-after  .code-block { border-color: rgba(52,199,89,0.2); }
 
   /* ─── INLINE CODE ─── */
   code {
@@ -351,15 +371,52 @@
           <span class="issue-icon">&#128269;</span>
           <span class="issue-title">Tag <code>marks</code> en las queries</span>
         </div>
-        <p class="issue-body">Se reimplementó el flujo para que las marcas (<code>MARK</code>) puedan explotarse libremente mediante el tag lógico <code>marks</code>, filtrable por <code>subtype</code> en cualquier query de grid o sección. El siguiente ejemplo muestra su uso combinado con otros filtros habituales:</p>
+        <p class="issue-body">Se reimplementó el flujo para que las marcas (<code>MARK</code>) puedan explotarse libremente mediante el tag lógico <code>marks</code>, filtrable por <code>subtype</code> en cualquier query de grid o sección. El siguiente ejemplo muestra su uso para identificar productos BdV:</p>
         <div class="code-block">
-          <div class="code-block-header"><span class="code-block-lang">Query DSL</span></div>
+          <div class="code-block-header"><span class="code-block-lang">Filtro para BDV</span></div>
           <pre>NORTH AND (woman OR (man AND Unisex))
-AND <span class="code-v">marks:BDV</span> OR <span class="code-v">marks:BASESTYLE</span>     <span class="code-c">// filtra por mark</span>
+AND <span class="code-v">marks:BDV</span>
 AND (NOT ((accessories) OR (perfumes))
      AND ((*:* AND NOT availability_status:COMING_SOON)
      AND (NOT(price_cut:[0.01 TO 1] OR labels:special_price))))
 AND NOT (promotions:SALES**)</pre>
+        </div>
+      </div>
+    </div>
+
+    <hr class="premise-section-divider">
+
+    <div class="premise-group">
+      <p class="premise-group-label">Evolución de casos de uso actuales</p>
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">&#128260;</span>
+          <span class="issue-title">Stylings</span>
+        </div>
+        <p class="issue-body">El tag lógico <code>stylings</code> queda absorbido por el nuevo flujo. Las queries existentes que lo utilizaban migran directamente a <code>marks</code> con el mismo identificador:</p>
+        <div class="diff-grid">
+          <div class="diff-before">
+            <p class="diff-col-label diff-col-label-before">Antes</p>
+            <div class="code-block">
+              <pre>NORTH AND (woman OR (man AND Unisex))
+AND <span class="code-del">stylings:BASESTYLE</span>
+AND (NOT ((accessories) OR (perfumes))
+     AND ((*:* AND NOT availability_status:COMING_SOON)
+     AND (NOT(price_cut:[0.01 TO 1] OR labels:special_price))))
+AND NOT (promotions:SALES**)</pre>
+            </div>
+          </div>
+          <div class="diff-after">
+            <p class="diff-col-label diff-col-label-after">Después</p>
+            <div class="code-block">
+              <pre>NORTH AND (woman OR (man AND Unisex))
+AND <span class="code-v">marks:BASESTYLE</span>
+AND (NOT ((accessories) OR (perfumes))
+     AND ((*:* AND NOT availability_status:COMING_SOON)
+     AND (NOT(price_cut:[0.01 TO 1] OR labels:special_price))))
+AND NOT (promotions:SALES**)</pre>
+            </div>
+          </div>
         </div>
       </div>
     </div>
