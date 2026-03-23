@@ -124,6 +124,30 @@
   .ctx-text { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
   .ctx-text strong { color: var(--text-primary); font-weight: 600; }
 
+  /* ─── INSIGHT FLOW ─── */
+  .insight-flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) { .insight-flow { grid-template-columns: 1fr; } }
+  .insight-card {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-top: 2px solid var(--c, rgba(255,255,255,0.2));
+    background: rgba(255,255,255,0.02);
+    padding: 16px 16px 18px;
+    transition: background 0.25s;
+  }
+  .insight-card:hover { background: rgba(255,255,255,0.04); }
+  .insight-step {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--c); margin-bottom: 8px;
+  }
+  .insight-text { font-size: 12px; color: var(--text-secondary); line-height: 1.65; }
+  .insight-text strong { color: var(--text-primary); font-weight: 600; }
+
   /* ─── ISSUE / PREMISE CARDS ─── */
   .issue-list { display: flex; flex-direction: column; gap: 14px; }
 
@@ -301,34 +325,24 @@
       <div class="section-accent" style="background:var(--accent-purple)"></div>
       <div>
         <div class="section-title">Solución técnica</div>
-        <div class="section-desc">El nuevo flujo y cómo se modela el atributo</div>
+        <div class="section-desc">Del problema al enfoque: cómo convertimos una colisión en una oportunidad de producto</div>
       </div>
     </div>
 
-    <p class="content-lead">La reimplementación elimina los comportamientos fijos asociados a los subtipos de <code>MARK</code> y expone las marcas como un nuevo <strong style="color:var(--text-primary)">tag lógico</strong> <code>marks</code>, por el que se podrán aplicar condiciones y filtros tanto en la query del grid como en la de las secciones.</p>
-
-    <div class="premise-group">
-      <p class="premise-group-label">Estructura del atributo MARK</p>
-      <div class="issue-card">
-        <div class="issue-card-header">
-          <span class="issue-icon">&#128196;</span>
-          <span class="issue-title">Modelo de datos recibido</span>
-        </div>
-        <p class="issue-body">El atributo llega desde el sistema origen con la siguiente estructura. El campo <code>subtype</code> actúa como identificador semántico de la marca (ej. <code>BDV</code>, <code>STYLING_INFO</code>).</p>
-        <div class="code-block">
-          <div class="code-block-header"><span class="code-block-lang">JSON</span></div>
-          <pre><span class="code-p">{</span>
-  <span class="code-k">"type"</span><span class="code-p">:</span> <span class="code-p">{</span> <span class="code-k">"value"</span><span class="code-p">:</span> <span class="code-s">"Mark"</span> <span class="code-p">},</span>
-  <span class="code-k">"subtype"</span><span class="code-p">:</span> <span class="code-p">{</span> <span class="code-k">"value"</span><span class="code-p">:</span> <span class="code-s">"BDV"</span> <span class="code-p">},</span>
-  <span class="code-k">"identifier"</span><span class="code-p">:</span> <span class="code-p">{</span> <span class="code-k">"value"</span><span class="code-p">:</span> <span class="code-s">"BDV"</span> <span class="code-p">},</span>
-  <span class="code-k">"values"</span><span class="code-p">:</span> <span class="code-p">[],</span>
-  <span class="code-k">"properties"</span><span class="code-p">:</span> <span class="code-p">{}</span>
-<span class="code-p">}</span></pre>
-        </div>
+    <div class="insight-flow">
+      <div class="insight-card" style="--c:#007AFF">
+        <div class="insight-step">Solución acordada</div>
+        <p class="insight-text">Usar atributos de tipo <strong>MARK</strong> para identificar los productos BdV. Decisión consensuada con PACMAN y Arquitectura como la más correcta y sostenible.</p>
+      </div>
+      <div class="insight-card" style="--c:#FF3B30">
+        <div class="insight-step">Problema detectado</div>
+        <p class="insight-text">Grid-Core ya tenía <strong>comportamientos fijos</strong> asociados a subtipos MARK — como el tag lógico <code>stylings</code> — que colisionarían con el nuevo uso.</p>
+      </div>
+      <div class="insight-card" style="--c:#34C759">
+        <div class="insight-step">Oportunidad de producto</div>
+        <p class="insight-text">En lugar de un problema, se vio una oportunidad de <strong>flexibilizar el API</strong> y reducir lógica de negocio ajena a grid-core, de cara a seguir iterando el producto.</p>
       </div>
     </div>
-
-    <hr class="premise-section-divider">
 
     <div class="premise-group">
       <p class="premise-group-label">Nuevo tag lógico</p>
@@ -337,7 +351,7 @@
           <span class="issue-icon">&#128269;</span>
           <span class="issue-title">Tag <code>marks</code> en las queries</span>
         </div>
-        <p class="issue-body">Se crea el tag lógico <code>marks</code> que permite filtrar por el <code>subtype</code> del atributo MARK en cualquier query de grid o sección. El siguiente ejemplo muestra su uso combinado con otros filtros habituales:</p>
+        <p class="issue-body">Se reimplementó el flujo para que las marcas (<code>MARK</code>) puedan explotarse libremente mediante el tag lógico <code>marks</code>, filtrable por <code>subtype</code> en cualquier query de grid o sección. El siguiente ejemplo muestra su uso combinado con otros filtros habituales:</p>
         <div class="code-block">
           <div class="code-block-header"><span class="code-block-lang">Query DSL</span></div>
           <pre>NORTH AND (woman OR (man AND Unisex))
@@ -420,10 +434,16 @@ AND NOT (promotions:SALES**)</pre>
     );
   });
 
-  // Stagger context bullets on first load
   gsap.fromTo('.ctx-item',
     { opacity: 0, x: -12 },
     { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, delay: 0.5 }
+  );
+
+  gsap.fromTo('.insight-card',
+    { opacity: 0, y: 14 },
+    { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1,
+      scrollTrigger: { trigger: '.insight-flow', start: 'top 88%' }
+    }
   );
 </script>
 </body>
