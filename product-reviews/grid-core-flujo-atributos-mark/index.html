@@ -218,15 +218,20 @@
     gap: 10px;
     margin-top: 14px;
     align-items: start;
+    /* fix: prevent grid children from overflowing their columns */
+    overflow: hidden;
   }
   @media (max-width: 640px) { .diff-grid { grid-template-columns: 1fr; } }
+  /* fix: grid children must declare min-width:0 or they ignore column boundaries */
+  .diff-before, .diff-after { min-width: 0; overflow: hidden; }
   .diff-col-label {
     font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
     text-transform: uppercase; padding: 0 2px 6px;
   }
   .diff-col-label-before { color: var(--accent-red); }
   .diff-col-label-after  { color: var(--accent-green); }
-  .diff-grid .code-block { margin-top: 0; }
+  .diff-grid .code-block { margin-top: 0; overflow: hidden; }
+  .diff-grid .code-block pre { font-size: 10px; padding: 12px 14px; white-space: pre-wrap; word-break: break-all; }
   .diff-before .code-block { border-color: rgba(255,59,48,0.2); }
   .diff-after  .code-block { border-color: rgba(52,199,89,0.2); }
 
@@ -393,7 +398,7 @@ AND NOT (promotions:SALES**)</pre>
           <span class="issue-icon">&#128260;</span>
           <span class="issue-title">Stylings</span>
         </div>
-        <p class="issue-body">El tag lógico <code>stylings</code> queda absorbido por el nuevo flujo. Las queries existentes que lo utilizaban migran directamente a <code>marks</code> con el mismo identificador:</p>
+        <p class="issue-body">El tag lógico <code>stylings</code> queda absorbido por el nuevo flujo. Las queries existentes migran directamente a <code>marks</code> con el mismo identificador:</p>
         <div class="diff-grid">
           <div class="diff-before">
             <p class="diff-col-label diff-col-label-before">Antes</p>
