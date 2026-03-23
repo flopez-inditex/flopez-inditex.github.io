@@ -154,56 +154,6 @@
   .code-v  { color: #34C759; }
   .code-p  { color: rgba(255,255,255,0.45); }
 
-  /* ─── TWO-COL GRID ─── */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
-
-  /* ─── COMPARISON TABLE ─── */
-  .cmp-table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-  .cmp-table { width: 100%; border-collapse: collapse; font-size: 12px; line-height: 1.6; }
-  .cmp-table thead tr { border-bottom: 1px solid rgba(191,90,242,0.2); }
-  .cmp-table th {
-    padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600;
-    letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-purple);
-    background: rgba(191,90,242,0.04); white-space: nowrap;
-  }
-  .cmp-table td { padding: 13px 16px; color: var(--text-secondary); vertical-align: top; border-top: 1px solid var(--border); }
-  .cmp-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
-
-  /* ─── ACCEPTANCE CASES ─── */
-  .ac-list { display: flex; flex-direction: column; gap: 14px; }
-  .ac-card {
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    background: rgba(255,255,255,0.02);
-    padding: 18px 20px;
-    transition: border-color 0.25s, background 0.25s;
-  }
-  .ac-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.13); }
-  .ac-card-title {
-    font-size: 13px; font-weight: 600; margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .ac-badge {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 6px;
-    background: rgba(52,199,89,0.12); border: 1px solid rgba(52,199,89,0.25);
-    color: var(--accent-green); font-size: 10px; font-weight: 700; flex-shrink: 0;
-  }
-  .ac-row {
-    display: flex; gap: 10px; align-items: baseline;
-    padding: 7px 0; border-top: 1px solid rgba(255,255,255,0.04);
-    font-size: 12px; color: var(--text-secondary); line-height: 1.6;
-  }
-  .ac-row:first-of-type { border-top: none; padding-top: 0; }
-  .ac-key {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
-    flex-shrink: 0; width: 64px; padding-top: 1px;
-  }
-  .ac-key.dado  { color: var(--accent-cyan); }
-  .ac-key.cuando { color: var(--accent-orange); }
-  .ac-key.entonces { color: var(--accent-green); }
-
   /* ─── INLINE CODE ─── */
   code {
     font-family: 'JetBrains Mono', monospace;
@@ -331,101 +281,9 @@ AND NOT (promotions:SALES**)</pre>
       </div>
     </div>
 
-    <hr class="premise-section-divider">
-
-    <div class="premise-group">
-      <p class="premise-group-label">Comparativa con el flujo anterior</p>
-      <div class="cmp-table-wrap">
-        <table class="cmp-table">
-          <thead>
-            <tr>
-              <th>Aspecto</th>
-              <th>Flujo anterior</th>
-              <th>Nuevo flujo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Comportamiento del subtipo</td>
-              <td>Fijo, condicionado en el código</td>
-              <td>Libre, sin lógica asociada en el motor</td>
-            </tr>
-            <tr>
-              <td>Forma de explotar la marca</td>
-              <td>Implícita (el sistema reacciona)</td>
-              <td>Explícita vía tag lógico <code>marks:&lt;subtipo&gt;</code></td>
-            </tr>
-            <tr>
-              <td>Granularidad</td>
-              <td>Global</td>
-              <td>Por mercado</td>
-            </tr>
-            <tr>
-              <td>Configuración por PACMAN</td>
-              <td><code>stylings:BASESTYLE</code> (DLS)</td>
-              <td><code>mocacoOutfitSelectionSettings.customizations</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
   </div>
 
-  <!-- ══ SECCIÓN 3 — CRITERIOS DE ACEPTACIÓN ══ -->
-  <div class="section-block reveal">
-    <div class="section-header">
-      <div class="section-accent" style="background:var(--accent-green)"></div>
-      <div>
-        <div class="section-title">Criterios de aceptación</div>
-        <div class="section-desc">Casos de uso que deben funcionar con el nuevo flujo</div>
-      </div>
-    </div>
-
-    <div class="ac-list">
-
-      <div class="ac-card">
-        <div class="ac-card-title">
-          <span class="ac-badge">1</span>
-          Mark de tipo <code>STYLING_INFO</code> — Estilismo base de venta
-        </div>
-        <div class="ac-row">
-          <span class="ac-key dado">Dado</span>
-          <span>un CC con un atributo <code>type = MARK</code>, <code>subtype = STYLING_INFO</code> e <code>identifier = BASESTYLE</code></span>
-        </div>
-        <div class="ac-row">
-          <span class="ac-key cuando">Cuando</span>
-          <span>se defina una parrilla con el tag lógico <code>marks:BASESTYLE</code></span>
-        </div>
-        <div class="ac-row">
-          <span class="ac-key entonces">Entonces</span>
-          <span>el CC se devuelve en la llamada <code>GetGrid</code> siempre que cumpla el resto de filtros</span>
-        </div>
-      </div>
-
-      <div class="ac-card">
-        <div class="ac-card-title">
-          <span class="ac-badge">2</span>
-          Mark de tipo <code>BDV</code> — Base de venta directa
-        </div>
-        <div class="ac-row">
-          <span class="ac-key dado">Dado</span>
-          <span>un CC con un atributo <code>type = MARK</code>, <code>subtype = BDV</code> e <code>identifier = BDV</code></span>
-        </div>
-        <div class="ac-row">
-          <span class="ac-key cuando">Cuando</span>
-          <span>se defina una parrilla con el tag lógico <code>marks:BDV</code></span>
-        </div>
-        <div class="ac-row">
-          <span class="ac-key entonces">Entonces</span>
-          <span>el CC se devuelve en la llamada <code>GetGrid</code> siempre que cumpla el resto de filtros</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ══ SECCIÓN 4 — MIGRACIÓN ══ -->
+  <!-- ══ SECCIÓN 3 — MIGRACIÓN ══ -->
   <div class="section-block reveal">
     <div class="section-header">
       <div class="section-accent" style="background:var(--accent-orange)"></div>
@@ -453,28 +311,6 @@ AND NOT (promotions:SALES**)</pre>
           <div class="example-item">
             <span class="example-bullet">Ahora</span>
             <span class="example-text">Campo <strong>mocacoOutfitSelectionSettings.customizations</strong> para seleccionar el estilismo, lo que permite usar un DLS del tipo <code>marks:BASESTYLE</code></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="issue-card">
-        <div class="issue-card-header">
-          <span class="issue-icon">&#128274;</span>
-          <span class="issue-title">Contratos de API no afectados</span>
-        </div>
-        <p class="issue-body">Este cambio no altera los contratos existentes de los endpoints principales. Los siguientes elementos permanecen sin cambios:</p>
-        <div class="example-list">
-          <div class="example-item">
-            <span class="example-bullet">&#10003;</span>
-            <span class="example-text"><strong>buildMiniGrid</strong> — sin cambios en el contrato</span>
-          </div>
-          <div class="example-item">
-            <span class="example-bullet">&#10003;</span>
-            <span class="example-text"><strong>getGridFilters</strong> — sin cambios en el contrato</span>
-          </div>
-          <div class="example-item">
-            <span class="example-bullet">&#10003;</span>
-            <span class="example-text"><strong>API de visibilidad</strong> — no afectada</span>
           </div>
         </div>
       </div>
