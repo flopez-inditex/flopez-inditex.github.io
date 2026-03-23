@@ -82,9 +82,14 @@
     font-size: 13px;
     color: var(--text-secondary);
     line-height: 1.75;
-    margin-bottom: 24px;
-    padding-bottom: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--border);
+  }
+  .content-lead:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
   }
 
   /* ─── ISSUE / PREMISE CARDS ─── */
@@ -250,7 +255,7 @@
   <div class="page-header reveal">
     <p class="label">Grid-Core · Product Review</p>
     <h1>Flujo de Atributos MARK</h1>
-    <p>Reimplementación del flujo de atributos MARK para permitir su explotación libre como tag lógico en queries de grid y secciones.</p>
+    <p>Reimplementación del flujo de atributos MARK para permitir su explotación libre como tag lógico en filtros de parrilla.</p>
   </div>
 
   <!-- ══ SECCIÓN 1 — CONTEXTO ══ -->
@@ -263,27 +268,12 @@
       </div>
     </div>
 
-    <p class="content-lead">Desde el equipo de PACMAN se traslada la necesidad de los comerciales de identificar ciertos estilismos como <strong style="color:var(--text-primary)">base de venta</strong> — productos con alta rotación tanto en tienda física como online — con el objetivo de crear secciones personalizadas con ellos. Esta diferenciación debe hacerse a nivel de mercado.</p>
+    <p class="content-lead">A partir de una petición de negocio para identificar ciertos productos denominados <strong style="color:var(--text-primary)">Base de Venta (BdV)</strong> — productos con alta rotación tanto en tienda física como online — con el fin de crear secciones personalizadas y segmentadas a nivel de mercado, desde el equipo de Grid-Core se realizó un análisis conjunto con PACMAN y Arquitectura. La conclusión fue que la solución más correcta y sostenible a largo plazo era etiquetar estos productos mediante <strong style="color:var(--text-primary)">atributos de tipo MARK</strong> que indicasen su condición de producto BdV.</p>
 
-    <div class="issue-list">
+    <p class="content-lead">Sin embargo, debido a los plazos requeridos por negocio, esta solución no era factible en el corto plazo. Como medida temporal se decidió implementar un <strong style="color:var(--text-primary)">KPI</strong> que permitiese identificar estos productos a partir de información publicada en Snowflake.</p>
 
-      <div class="issue-card">
-        <div class="issue-card-header">
-          <span class="issue-icon">&#128683;</span>
-          <span class="issue-title">¿Por qué no se usan tags?</span>
-        </div>
-        <p class="issue-body">Los <em>tags</em> serían la opción más natural para marcar productos, pero no permiten la granularidad necesaria: no es posible aplicarlos a nivel de mercado. Se descartan como mecanismo para este caso de uso.</p>
-      </div>
+    <p class="content-lead">En paralelo, desde el equipo de Grid-Core se diseñó e implementó el flujo definitivo basado en atributos MARK que resuelve este caso de uso de forma genérica, dando cabida a necesidades similares que puedan surgir en el futuro.</p>
 
-      <div class="issue-card">
-        <div class="issue-card-header">
-          <span class="issue-icon">&#9989;</span>
-          <span class="issue-title">La solución: atributos de tipo MARK</span>
-        </div>
-        <p class="issue-body">Tras un análisis coordinado con PACMAN y Arquitectura, se decidió utilizar los atributos de tipo <code>MARK</code>. Son semánticamente adecuados y permiten la granularidad por mercado requerida. Sin embargo, actualmente existen comportamientos fijos asociados a ciertos subtipos que impiden su explotación libre — por eso es necesario <strong style="color:var(--text-primary)">reimplementar el flujo</strong>.</p>
-      </div>
-
-    </div>
   </div>
 
   <!-- ══ SECCIÓN 2 — SOLUCIÓN TÉCNICA ══ -->
