@@ -92,6 +92,38 @@
     border-bottom: none;
   }
 
+  /* ─── CONTEXT BULLET TIMELINE ─── */
+  .ctx-list { display: flex; flex-direction: column; }
+  .ctx-item {
+    display: flex; gap: 20px; align-items: flex-start;
+    position: relative; padding-bottom: 26px;
+  }
+  .ctx-item:last-child { padding-bottom: 0; }
+  .ctx-item::after {
+    content: '';
+    position: absolute;
+    left: 17px; top: 40px;
+    width: 2px; height: calc(100% - 26px);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.01) 100%);
+  }
+  .ctx-item:last-child::after { display: none; }
+  .ctx-badge {
+    flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    position: relative; z-index: 1;
+  }
+  .ctx-content { padding-top: 4px; flex: 1; }
+  .ctx-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ctx-text { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+  .ctx-text strong { color: var(--text-primary); font-weight: 600; }
+
   /* ─── ISSUE / PREMISE CARDS ─── */
   .issue-list { display: flex; flex-direction: column; gap: 14px; }
 
@@ -218,12 +250,49 @@
       </div>
     </div>
 
-    <p class="content-lead">A partir de una petición de negocio para identificar ciertos productos denominados <strong style="color:var(--text-primary)">Base de Venta (BdV)</strong> — productos con alta rotación tanto en tienda física como online — con el fin de crear secciones personalizadas y segmentadas a nivel de mercado, desde el equipo de Grid-Core se realizó un análisis conjunto con PACMAN y Arquitectura. La conclusión fue que la solución más correcta y sostenible a largo plazo era etiquetar estos productos mediante <strong style="color:var(--text-primary)">atributos de tipo MARK</strong> que indicasen su condición de producto BdV.</p>
+    <div class="ctx-list">
 
-    <p class="content-lead">Sin embargo, debido a los plazos requeridos por negocio, esta solución no era factible en el corto plazo. Como medida temporal se decidió implementar un <strong style="color:var(--text-primary)">KPI</strong> que permitiese identificar estos productos a partir de información publicada en Snowflake.</p>
+      <div class="ctx-item">
+        <div class="ctx-badge" style="background:rgba(0,122,255,0.12);color:#007AFF;border-color:rgba(0,122,255,0.3);">01</div>
+        <div class="ctx-content">
+          <p class="ctx-label" style="color:#007AFF">Petición de negocio</p>
+          <p class="ctx-text">Negocio necesita identificar los productos <strong>Base de Venta (BdV)</strong> — alta rotación en tienda física y online — para construir secciones personalizadas segmentadas por mercado.</p>
+        </div>
+      </div>
 
-    <p class="content-lead">En paralelo, desde el equipo de Grid-Core se diseñó e implementó el flujo definitivo basado en atributos MARK que resuelve este caso de uso de forma genérica, dando cabida a necesidades similares que puedan surgir en el futuro.</p>
+      <div class="ctx-item">
+        <div class="ctx-badge" style="background:rgba(191,90,242,0.12);color:#BF5AF2;border-color:rgba(191,90,242,0.3);">02</div>
+        <div class="ctx-content">
+          <p class="ctx-label" style="color:#BF5AF2">Diagnóstico técnico</p>
+          <p class="ctx-text">Análisis conjunto con PACMAN y Arquitectura: etiquetar con <strong>atributos de tipo MARK</strong> es la solución correcta y sostenible a largo plazo.</p>
+        </div>
+      </div>
 
+      <div class="ctx-item">
+        <div class="ctx-badge" style="background:rgba(255,59,48,0.12);color:#FF3B30;border-color:rgba(255,59,48,0.3);">03</div>
+        <div class="ctx-content">
+          <p class="ctx-label" style="color:#FF3B30">Bloqueante de plazo</p>
+          <p class="ctx-text">Los tiempos requeridos por negocio no son compatibles con la implementación del flujo MARK a corto plazo.</p>
+        </div>
+      </div>
+
+      <div class="ctx-item">
+        <div class="ctx-badge" style="background:rgba(255,214,10,0.12);color:#FFD60A;border-color:rgba(255,214,10,0.3);">04</div>
+        <div class="ctx-content">
+          <p class="ctx-label" style="color:#FFD60A">Solución puente</p>
+          <p class="ctx-text">Se implementa un <strong>KPI temporal</strong> que identifica los productos BdV a partir de información publicada en Snowflake.</p>
+        </div>
+      </div>
+
+      <div class="ctx-item">
+        <div class="ctx-badge" style="background:rgba(52,199,89,0.12);color:#34C759;border-color:rgba(52,199,89,0.3);">05</div>
+        <div class="ctx-content">
+          <p class="ctx-label" style="color:#34C759">Implementación definitiva</p>
+          <p class="ctx-text">Grid-Core diseña e implementa en paralelo el flujo MARK definitivo: <strong>genérico, reutilizable</strong> y desacoplado de casos de uso concretos.</p>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <!-- ══ SECCIÓN 2 — SOLUCIÓN TÉCNICA ══ -->
@@ -350,6 +419,12 @@ AND NOT (promotions:SALES**)</pre>
       }
     );
   });
+
+  // Stagger context bullets on first load
+  gsap.fromTo('.ctx-item',
+    { opacity: 0, x: -12 },
+    { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, delay: 0.5 }
+  );
 </script>
 </body>
 </html>
