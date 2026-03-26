@@ -428,7 +428,7 @@ AND NOT (No mostrar en grids)</pre>
         </div>
         <p class="issue-body" style="margin-top:1rem;">
           <span style="font-size:0.85rem;color:var(--text-secondary);">
-            ✅ <strong>Equivalencia verificada:</strong> la respuesta del API para un grid configurado con la query <code>stylings</code> (Antes) y la misma query con <code>marks</code> (Después) produce resultados idénticos. La única diferencia observada en la comparación fue el campo <code>calculated_timestamp</code> — que varía por el instante de ejecución de cada llamada — confirmando que el contenido del grid, productos, filtros y orden son exactamente iguales en ambos modelos.
+            ✅ <strong>Equivalencia verificada:</strong> se compararon las respuestas de los grids <code>0bb4d14f-e062-4536-bb4d-dbc83e03cd81</code> (query con <code>stylings</code>) y <code>test-marks</code> (query con <code>marks</code>). Ambas respuestas son idénticas: mismo número de productos, filtros y orden. La única diferencia fue el campo <code>calculated_timestamp</code>, que refleja el instante de ejecución de cada llamada.
           </span>
         </p>
       </div>
