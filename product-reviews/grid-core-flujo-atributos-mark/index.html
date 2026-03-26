@@ -446,7 +446,7 @@ AND NOT (No mostrar en grids)</pre>
       </div>
     </div>
 
-    <p class="content-lead">Ambos flujos conviven durante la transición: el legado con comportamientos fijos internos y el nuevo con el tag lógico <code>marks</code>. El objetivo es <strong style="color:var(--text-primary)">deprecar el flujo legado</strong>, que contiene lógica de negocio interna que no debería existir en Grid-Core, y dejar al consumidor la responsabilidad de construir sus filtros libremente.</p>
+    <p class="content-lead">Ambos flujos conviven durante la transición: el legacy con comportamientos fijos internos y el nuevo con el tag lógico <code>marks</code>. El objetivo es <strong style="color:var(--text-primary)">deprecar el flujo legacy</strong>, que contiene lógica de negocio interna que no debería existir en Grid-Core, y dejar al consumidor la responsabilidad de construir sus filtros libremente.</p>
 
     <div class="issue-list">
 
@@ -455,7 +455,7 @@ AND NOT (No mostrar en grids)</pre>
           <span class="issue-icon">&#128226;</span>
           <span class="issue-title">Migración requerida en PACMAN</span>
         </div>
-        <p class="issue-body">PACMAN debe migrar su integración al nuevo flujo para que el legado pueda ser retirado. El campo <code>mocacoOutfitSelectionSettings.customizations</code> permite usar un DLS con el tag <code>marks:BASESTYLE</code> directamente, sin depender de la lógica interna de Grid-Core.</p>
+        <p class="issue-body">PACMAN debe migrar su integración al nuevo flujo para que el legacy pueda ser retirado.</p>
 
         <p class="issue-body" style="margin-top:0.75rem;">En el índice de Solr, los campos <code>marks</code> y <code>stylingTags</code> son equivalentes y contienen los mismos valores. Durante la convivencia ambos están disponibles, pero solo <code>marks</code> formará parte del nuevo contrato:</p>
         <div class="code-block" style="margin-top:0.5rem;">
@@ -496,11 +496,6 @@ AND NOT (No mostrar en grids)</pre>
         </div>
       </div>
 
-    </div>
-
-    <div class="callout" style="margin-top:16px">
-      <span class="callout-icon">&#9888;&#65039;</span>
-      <p class="callout-body"><strong>Acción requerida:</strong> PACMAN debe migrar su configuración a <code>mocacoOutfitSelectionSettings.customizations</code> para usar el tag lógico <code>marks</code> antes de que el flujo legado sea retirado.</p>
     </div>
 
   </div>
