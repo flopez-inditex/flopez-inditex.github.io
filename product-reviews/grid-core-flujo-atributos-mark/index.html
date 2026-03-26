@@ -400,26 +400,37 @@ AND NOT (promotions:SALES**)</pre>
           <div class="diff-before">
             <p class="diff-col-label diff-col-label-before">Antes</p>
             <div class="code-block">
-              <pre>NORTH AND (woman OR (man AND Unisex))
-AND <span class="code-del">stylings:BASESTYLE</span>
-AND (NOT ((accessories) OR (perfumes))
-     AND ((*:* AND NOT availability_status:COMING_SOON)
-     AND (NOT(price_cut:[0.01 TO 1] OR labels:special_price))))
-AND NOT (promotions:SALES**)</pre>
+              <pre>NORTH AND (man OR (woman AND Unisex
+AND <span class="code-del">stylings:BASESTYLE</span>))
+AND NOT (Early access)
+AND NOT (Massimo dutti)
+AND ((polos))
+AND (<span class="code-del">stylings:BASESTYLE</span>)
+AND NOT (promotions:SALES**)
+AND NOT <span class="code-del">stylings:EARLYACCESS</span>
+AND NOT (No mostrar en grids)</pre>
             </div>
           </div>
           <div class="diff-after">
             <p class="diff-col-label diff-col-label-after">Después</p>
             <div class="code-block">
-              <pre>NORTH AND (woman OR (man AND Unisex))
-AND <span class="code-v">marks:BASESTYLE</span>
-AND (NOT ((accessories) OR (perfumes))
-     AND ((*:* AND NOT availability_status:COMING_SOON)
-     AND (NOT(price_cut:[0.01 TO 1] OR labels:special_price))))
-AND NOT (promotions:SALES**)</pre>
+              <pre>NORTH AND (man OR (woman AND Unisex
+AND <span class="code-v">marks:BASESTYLE</span>))
+AND NOT (Early access)
+AND NOT (Massimo dutti)
+AND ((polos))
+AND (<span class="code-v">marks:BASESTYLE</span>)
+AND NOT (promotions:SALES**)
+AND NOT <span class="code-v">marks:EARLYACCESS</span>
+AND NOT (No mostrar en grids)</pre>
             </div>
           </div>
         </div>
+        <p class="issue-body" style="margin-top:1rem;">
+          <span style="font-size:0.85rem;color:var(--text-secondary);">
+            ✅ <strong>Equivalencia verificada:</strong> la respuesta del API para un grid configurado con la query <code>stylings</code> (Antes) y la misma query con <code>marks</code> (Después) produce resultados idénticos. La única diferencia observada en la comparación fue el campo <code>calculated_timestamp</code> — que varía por el instante de ejecución de cada llamada — confirmando que el contenido del grid, productos, filtros y orden son exactamente iguales en ambos modelos.
+          </span>
+        </p>
       </div>
     </div>
 
