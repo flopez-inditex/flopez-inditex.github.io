@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPI-Engine · Nuevas capacidades y flexibilidad en las métricas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #1a1a1a;
+    --surface: rgba(255,255,255,0.03);
+    --surface-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.18);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255,255,255,0.6);
+    --text-tertiary: rgba(255,255,255,0.35);
+    --accent-blue: #007AFF;
+    --accent-green: #34C759;
+    --accent-orange: #FF9500;
+    --accent-cyan: #5AC8FA;
+    --accent-purple: #BF5AF2;
+    --accent-yellow: #FFD60A;
+    --accent-red: #FF3B30;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  .noise {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1000; opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 60px 48px 80px; }
+  @media (max-width: 768px) { .page-wrapper { padding: 40px 20px 60px; } }
+
+  .label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-tertiary); }
+  .reveal { opacity: 1; }
+
+  /* ─── HEADER ─── */
+  .page-header { margin-bottom: 48px; }
+  .page-header h1 { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -0.025em; line-height: 1.08; margin: 12px 0 10px; }
+  .page-header p { font-size: 15px; color: var(--text-secondary); max-width: 700px; line-height: 1.6; }
+
+  /* ─── SECTION BLOCK ─── */
+  .section-block {
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    padding: 30px 32px;
+    margin-bottom: 24px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .section-block:hover { background: var(--surface-hover); border-color: var(--border-strong); }
+
+  .section-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 22px; }
+  .section-accent { width: 3px; border-radius: 2px; min-height: 36px; flex-shrink: 0; }
+  .section-title { font-size: 17px; font-weight: 600; letter-spacing: -0.021em; margin-bottom: 4px; }
+  .section-desc { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
+
+  /* ─── CONTENT LEAD ─── */
+  .content-lead {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .content-lead:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  /* ─── CONTEXT BULLET TIMELINE ─── */
+  .ctx-list { display: flex; flex-direction: column; }
+  .ctx-item {
+    display: flex; gap: 20px; align-items: flex-start;
+    position: relative; padding-bottom: 26px;
+  }
+  .ctx-item:last-child { padding-bottom: 0; }
+  .ctx-item::after {
+    content: '';
+    position: absolute;
+    left: 17px; top: 40px;
+    width: 2px; height: calc(100% - 26px);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.01) 100%);
+  }
+  .ctx-item:last-child::after { display: none; }
+  .ctx-badge {
+    flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    position: relative; z-index: 1;
+  }
+  .ctx-content { padding-top: 4px; flex: 1; }
+  .ctx-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .ctx-text { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+  .ctx-text strong { color: var(--text-primary); font-weight: 600; }
+
+  /* ─── INSIGHT FLOW ─── */
+  .insight-flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) { .insight-flow { grid-template-columns: 1fr; } }
+  .insight-card {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-top: 2px solid var(--c, rgba(255,255,255,0.2));
+    background: rgba(255,255,255,0.02);
+    padding: 16px 16px 18px;
+    transition: background 0.25s;
+  }
+  .insight-card:hover { background: rgba(255,255,255,0.04); }
+  .insight-step {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--c); margin-bottom: 8px;
+  }
+  .insight-text { font-size: 12px; color: var(--text-secondary); line-height: 1.65; }
+  .insight-text strong { color: var(--text-primary); font-weight: 600; }
+
+  /* ─── ISSUE / PREMISE CARDS ─── */
+  .issue-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .issue-card {
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    padding: 18px 20px;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .issue-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.13); }
+
+  .issue-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .issue-icon { font-size: 15px; flex-shrink: 0; }
+  .issue-title { font-size: 14px; font-weight: 600; letter-spacing: -0.015em; }
+  .issue-body { font-size: 12px; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ─── FIELD TABLE ─── */
+  .field-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 12px; }
+  .field-table th {
+    text-align: left; padding: 8px 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--text-tertiary);
+    border-bottom: 1px solid var(--border);
+  }
+  .field-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .field-table tr:last-child td { border-bottom: none; }
+  .field-table td:first-child { color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; }
+  .field-required { color: var(--accent-green); font-weight: 600; }
+  .field-optional { color: var(--text-tertiary); }
+
+  /* ─── MIGRATION GRID ─── */
+  .migration-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  @media (max-width: 640px) { .migration-grid { grid-template-columns: 1fr; } }
+  .migration-card {
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--c, var(--accent-blue));
+    background: rgba(255,255,255,0.02);
+    padding: 16px 18px;
+  }
+  .migration-card-title {
+    font-size: 13px; font-weight: 600; letter-spacing: -0.015em;
+    margin-bottom: 6px; color: var(--c, var(--accent-blue));
+  }
+  .migration-card-body { font-size: 12px; color: var(--text-secondary); line-height: 1.65; }
+  .migration-card-body strong { color: var(--text-primary); font-weight: 600; }
+  .migration-metric-list { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(0,0,0,0.35);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .code-block-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+  }
+  .code-block-lang {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-tertiary);
+  }
+  .code-block pre {
+    padding: 16px 18px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-k  { color: #BF5AF2; }
+  .code-s  { color: #FF9F0A; }
+  .code-n  { color: #5AC8FA; }
+  .code-c  { color: rgba(255,255,255,0.28); font-style: italic; }
+  .code-v  { color: #34C759; }
+  .code-del { color: #FF3B30; }
+  .code-add { color: #34C759; }
+  .code-p  { color: rgba(255,255,255,0.45); }
+
+  /* ─── INLINE CODE ─── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    padding: 1px 6px;
+    color: var(--accent-cyan);
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-radius: 12px;
+    border: 1px solid rgba(255,149,0,0.2);
+    background: rgba(255,149,0,0.05);
+    padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-top: 16px;
+  }
+  .callout-green {
+    border-color: rgba(52,199,89,0.2);
+    background: rgba(52,199,89,0.05);
+  }
+  .callout-blue {
+    border-color: rgba(0,122,255,0.2);
+    background: rgba(0,122,255,0.05);
+  }
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { font-size: 12px; color: var(--text-secondary); line-height: 1.65; }
+  .callout-body strong { color: var(--accent-orange); font-weight: 600; }
+  .callout-green .callout-body strong { color: var(--accent-green); }
+  .callout-blue .callout-body strong  { color: var(--accent-blue); }
+
+  /* ─── PILLS ─── */
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+  .pill-green  { background: rgba(52,199,89,0.15);  color: #34C759; border: 1px solid rgba(52,199,89,0.2); }
+  .pill-orange { background: rgba(255,149,0,0.15);  color: #FF9500; border: 1px solid rgba(255,149,0,0.2); }
+  .pill-red    { background: rgba(255,59,48,0.15);  color: #FF3B30; border: 1px solid rgba(255,59,48,0.2); }
+  .pill-blue   { background: rgba(0,122,255,0.15);  color: #007AFF; border: 1px solid rgba(0,122,255,0.2); }
+  .pill-cyan   { background: rgba(90,200,250,0.15); color: #5AC8FA; border: 1px solid rgba(90,200,250,0.2); }
+  .pill-purple { background: rgba(191,90,242,0.15); color: #BF5AF2; border: 1px solid rgba(191,90,242,0.2); }
+  .pill-yellow { background: rgba(255,214,10,0.15); color: #FFD60A; border: 1px solid rgba(255,214,10,0.2); }
+  .pill-grey   { background: rgba(255,255,255,0.06); color: var(--text-tertiary); border: 1px solid var(--border); }
+
+  /* ─── OPERATOR TABLE ─── */
+  .operator-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  @media (max-width: 640px) { .operator-grid { grid-template-columns: repeat(2, 1fr); } }
+  .operator-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    padding: 14px 14px 16px;
+    text-align: center;
+  }
+  .operator-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .operator-desc { font-size: 11px; color: var(--text-tertiary); line-height: 1.5; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="page-wrapper">
+
+  <!-- ══ HEADER ══ -->
+  <div class="page-header reveal">
+    <p class="label">KPI-Engine · Product Review</p>
+    <h1>Nuevas capacidades y flexibilidad en las métricas</h1>
+    <p>Rediseño del modelo de definición de KPIs para habilitar un catálogo unificado, expresivo y autónomo: nuevo contrato de API, filtros avanzados y migración de todas las métricas existentes al nuevo modelo.</p>
+  </div>
+
+  <!-- ══ SECCIÓN 1 — CONTEXTO ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-blue)"></div>
+      <div>
+        <div class="section-title">Contexto y motivación</div>
+        <div class="section-desc">Por qué el modelo actual limita la evolución y qué problema resuelve este conjunto de cambios</div>
+      </div>
+    </div>
+
+    <div class="ctx-list">
+      <div class="ctx-item">
+        <div class="ctx-badge" style="color:var(--accent-blue);border-color:rgba(0,122,255,0.35);background:rgba(0,122,255,0.08)">01</div>
+        <div class="ctx-content">
+          <div class="ctx-label" style="color:var(--accent-blue)">Modelo actual — Fragmentación</div>
+          <div class="ctx-text">KPIEngine expone métricas a través de un modelo basado en <strong>variables individuales, fórmulas y proyecciones</strong>. Cada métrica requiere configuración separada y el modelo no permite declarar de forma compacta conjuntos de métricas que comparten fuente, ventana temporal y dimensiones de agrupación.</div>
+        </div>
+      </div>
+      <div class="ctx-item">
+        <div class="ctx-badge" style="color:var(--accent-orange);border-color:rgba(255,149,0,0.35);background:rgba(255,149,0,0.08)">02</div>
+        <div class="ctx-content">
+          <div class="ctx-label" style="color:var(--accent-orange)">Consecuencia — Fricción operativa</div>
+          <div class="ctx-text">La creación de nuevas métricas exige configurar manualmente múltiples objetos interdependientes. Los consumidores no pueden definir ni modificar métricas de forma autónoma a través del API, lo que ralentiza la incorporación de nuevas necesidades de negocio.</div>
+        </div>
+      </div>
+      <div class="ctx-item">
+        <div class="ctx-badge" style="color:var(--accent-purple);border-color:rgba(191,90,242,0.35);background:rgba(191,90,242,0.08)">03</div>
+        <div class="ctx-content">
+          <div class="ctx-label" style="color:var(--accent-purple)">Catalizador — Spike KPIENGINE-1127</div>
+          <div class="ctx-text">El análisis de nuevas capacidades identificó la necesidad de un <strong>contrato de API unificado</strong> que permita definir métricas declarativamente: fuente, ventana temporal, frecuencia de refresco, dimensiones, filtros y operadores de agregación, todo en un único objeto.</div>
+        </div>
+      </div>
+      <div class="ctx-item">
+        <div class="ctx-badge" style="color:var(--accent-green);border-color:rgba(52,199,89,0.35);background:rgba(52,199,89,0.08)">04</div>
+        <div class="ctx-content">
+          <div class="ctx-label" style="color:var(--accent-green)">Solución — Nuevo modelo + migración total</div>
+          <div class="ctx-text">Se diseña un <strong>nuevo contrato de API</strong> que coexiste con el modelo anterior durante la transición. Las métricas existentes (ventas, add-to-cart, stock, ratios de conversión) se migran progresivamente. El modelo antiguo queda deprecated una vez completada la migración.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 2 — NUEVO CONTRATO ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-cyan)"></div>
+      <div>
+        <div class="section-title">Nuevo contrato de API para definición de métricas</div>
+        <div class="section-desc">Un único objeto declarativo reemplaza la configuración fragmentada actual — <span class="pill pill-grey">KPIENGINE-1152</span> <span class="pill pill-grey">KPIENGINE-1153</span></div>
+      </div>
+    </div>
+
+    <p class="content-lead">El nuevo modelo permite que un consumidor declare en una <strong>única definición</strong> todo lo necesario para calcular y consultar un conjunto de métricas: fuente de datos, ventana temporal, granularidad, filtros y las métricas concretas a computar. El motor se encarga de planificar y ejecutar el cálculo de forma autónoma.</p>
+
+    <div class="code-block">
+      <div class="code-block-header">
+        <span class="code-block-lang">JSON — Ejemplo de definición de métrica</span>
+      </div>
+      <pre><span class="code-p">{</span>
+  <span class="code-n">"id"</span><span class="code-p">:</span>          <span class="code-s">"sales_24h_store_component"</span><span class="code-p">,</span>
+  <span class="code-n">"description"</span><span class="code-p">:</span> <span class="code-s">"Sales metrics last 24h by store and commercial component"</span><span class="code-p">,</span>
+  <span class="code-n">"source"</span><span class="code-p">:</span>      <span class="code-s">"SALES"</span><span class="code-p">,</span>
+  <span class="code-n">"window"</span><span class="code-p">:</span>      <span class="code-p">{</span> <span class="code-n">"unit"</span><span class="code-p">:</span> <span class="code-s">"HOURS"</span><span class="code-p">,</span> <span class="code-n">"value"</span><span class="code-p">:</span> <span class="code-v">24</span> <span class="code-p">},</span>
+  <span class="code-n">"schedule"</span><span class="code-p">:</span>    <span class="code-s">"5m"</span><span class="code-p">,</span>
+  <span class="code-n">"aggregators"</span><span class="code-p">:</span> <span class="code-p">[</span> <span class="code-s">"STORE_ID"</span><span class="code-p">,</span> <span class="code-s">"COMMERCIAL_COMPONENT_ID"</span> <span class="code-p">],</span>
+  <span class="code-n">"filters"</span><span class="code-p">:</span>     <span class="code-p">[</span>
+    <span class="code-p">{</span>
+      <span class="code-n">"aggregator"</span><span class="code-p">:</span> <span class="code-s">"CATEGORY_ID"</span><span class="code-p">,</span>
+      <span class="code-n">"operator"</span><span class="code-p">:</span>   <span class="code-s">"NOT_IN"</span><span class="code-p">,</span>
+      <span class="code-n">"values"</span><span class="code-p">:</span>     <span class="code-p">[</span><span class="code-v">123</span><span class="code-p">,</span> <span class="code-v">234</span><span class="code-p">,</span> <span class="code-v">345</span><span class="code-p">]</span>
+    <span class="code-p">}</span>
+  <span class="code-p">],</span>
+  <span class="code-n">"metrics"</span><span class="code-p">:</span> <span class="code-p">[</span>
+    <span class="code-p">{</span> <span class="code-n">"operator"</span><span class="code-p">:</span> <span class="code-s">"SUM"</span><span class="code-p">,</span> <span class="code-n">"column"</span><span class="code-p">:</span> <span class="code-s">"units * price"</span><span class="code-p">,</span> <span class="code-n">"name"</span><span class="code-p">:</span> <span class="code-s">"sa24stcc"</span> <span class="code-p">}</span>
+  <span class="code-p">]</span>
+<span class="code-p">}</span></pre>
+    </div>
+
+    <table class="field-table">
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Req.</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>id</td><td>string</td><td class="field-required">Sí</td><td>Identificador único de la métrica</td></tr>
+        <tr><td>source</td><td>enum</td><td class="field-required">Sí</td><td>Fuente de datos: <code>SALES</code>, <code>RETURNS</code>, <code>ADD_TO_CART</code>…</td></tr>
+        <tr><td>window.unit</td><td>enum</td><td class="field-required">Sí</td><td>Unidad temporal: <code>HOURS</code>, <code>DAYS</code>, <code>WEEKS</code>. Puede ser nulo para métricas de tipo snapshot (ej. stock)</td></tr>
+        <tr><td>window.value</td><td>integer</td><td class="field-required">Sí</td><td>Número de unidades de la ventana. Entero positivo</td></tr>
+        <tr><td>schedule</td><td>string</td><td class="field-required">Sí</td><td>Frecuencia de recálculo: <code>5m</code>, <code>1h</code>, <code>1d</code></td></tr>
+        <tr><td>aggregators</td><td>string[]</td><td class="field-required">Sí</td><td>Dimensiones de agrupación del resultado: <code>STORE_ID</code>, <code>COMMERCIAL_COMPONENT_ID</code>, <code>PRODUCT_COLOR_ID</code>…</td></tr>
+        <tr><td>filters</td><td>Filter[]</td><td class="field-optional">No</td><td>Condiciones de filtrado antes de agregar. Operadores: <code>IN</code>, <code>NOT_IN</code>, <code>NULL</code>, <code>NOT_NULL</code></td></tr>
+        <tr><td>metrics[].operator</td><td>enum</td><td class="field-required">Sí</td><td>Función de agregación: <code>SUM</code>, <code>AVG</code>, <code>COUNT</code>, <code>MIN</code>, <code>MAX</code></td></tr>
+        <tr><td>metrics[].column</td><td>string</td><td class="field-required">Sí</td><td>Columna o expresión aritmética sobre la que se aplica el operador. Ej: <code>units * amount</code></td></tr>
+        <tr><td>metrics[].name</td><td>string</td><td class="field-required">Sí</td><td>Nombre único del resultado dentro de la métrica</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-blue" style="margin-top: 20px;">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body"><strong>Integración interna transparente:</strong> el motor mapea automáticamente los campos del nuevo contrato a los mecanismos internos existentes (planificador, motor de ventana temporal, motor de filtrado y motor de agregación), garantizando compatibilidad total con las métricas ya registradas.</div>
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 3 — FILTROS AVANZADOS ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-purple)"></div>
+      <div>
+        <div class="section-title">Filtros avanzados: soporte de valores nulos</div>
+        <div class="section-desc">Nuevos operadores <code>NULL</code> y <code>NOT_NULL</code> para gestión explícita de nulos — <span class="pill pill-grey">KPIENGINE-1156</span></div>
+      </div>
+    </div>
+
+    <p class="content-lead">El modelo de filtros anterior no permitía gestionar valores nulos de forma explícita. Para excluir registros donde una dimensión era nula era necesario crear métricas auxiliares o duplicar lógica de filtrado. Los nuevos operadores eliminan esa necesidad.</p>
+
+    <div class="operator-grid">
+      <div class="operator-card">
+        <div class="operator-name" style="color:var(--accent-blue)">IN</div>
+        <div class="operator-desc">Incluye solo registros cuya dimensión esté en la lista de valores. <strong>Requiere</strong> <code>values</code></div>
+      </div>
+      <div class="operator-card">
+        <div class="operator-name" style="color:var(--accent-red)">NOT_IN</div>
+        <div class="operator-desc">Excluye registros cuya dimensión esté en la lista. <strong>Requiere</strong> <code>values</code></div>
+      </div>
+      <div class="operator-card" style="border-color:rgba(52,199,89,0.2)">
+        <div class="operator-name" style="color:var(--accent-green)">NULL</div>
+        <div class="operator-desc">Incluye solo registros donde la dimensión es nula. <strong>No admite</strong> <code>values</code></div>
+      </div>
+      <div class="operator-card" style="border-color:rgba(52,199,89,0.2)">
+        <div class="operator-name" style="color:var(--accent-green)">NOT_NULL</div>
+        <div class="operator-desc">Excluye registros donde la dimensión es nula. <strong>No admite</strong> <code>values</code></div>
+      </div>
+    </div>
+
+    <div class="code-block" style="margin-top:16px">
+      <div class="code-block-header"><span class="code-block-lang">JSON — Ejemplo combinando NOT_IN y NOT_NULL</span></div>
+      <pre><span class="code-n">"filters"</span><span class="code-p">: [</span>
+  <span class="code-p">{</span>
+    <span class="code-n">"aggregator"</span><span class="code-p">:</span> <span class="code-s">"CATEGORY_ID"</span><span class="code-p">,</span>
+    <span class="code-n">"operator"</span><span class="code-p">:</span>   <span class="code-s">"NOT_IN"</span><span class="code-p">,</span>
+    <span class="code-n">"values"</span><span class="code-p">:</span>     <span class="code-p">[</span><span class="code-v">123</span><span class="code-p">,</span> <span class="code-v">234</span><span class="code-p">,</span> <span class="code-v">345</span><span class="code-p">]</span>
+  <span class="code-p">},</span>
+  <span class="code-p">{</span>
+    <span class="code-n">"aggregator"</span><span class="code-p">:</span> <span class="code-s">"CATEGORY_ID"</span><span class="code-p">,</span>
+    <span class="code-n">"operator"</span><span class="code-p">:</span>   <span class="code-s">"NOT_NULL"</span>  <span class="code-c">// sin campo values</span>
+  <span class="code-p">}</span>
+<span class="code-p">]</span></pre>
+    </div>
+
+    <div class="callout" style="margin-top:16px">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body"><strong>Regla de validación:</strong> si se incluye el campo <code>values</code> junto a los operadores <code>NULL</code> o <code>NOT_NULL</code>, el API responde con error 400. Los filtros son aditivos: un mismo KPI puede combinar múltiples operadores sobre la misma dimensión.</div>
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 4 — MIGRACIÓN DEL CATÁLOGO ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-green)"></div>
+      <div>
+        <div class="section-title">Migración del catálogo de métricas al nuevo contrato</div>
+        <div class="section-desc">Todas las métricas existentes se reexpresan bajo el nuevo modelo, de forma transparente para los consumidores</div>
+      </div>
+    </div>
+
+    <p class="content-lead">El objetivo es que <strong>todas las métricas del catálogo</strong> queden expresadas bajo el nuevo contrato, eliminando la coexistencia de dos modelos de configuración. Los valores calculados deben ser equivalentes a los del modelo anterior para el mismo rango temporal y granularidad.</p>
+
+    <div class="migration-grid">
+
+      <div class="migration-card" style="--c:var(--accent-blue)">
+        <div class="migration-card-title">📈 Métricas de ventas <span class="pill pill-blue" style="margin-left:6px">KPIENGINE-1125</span></div>
+        <div class="migration-card-body">
+          Migración de todas las métricas de ventas (importe y unidades) con ventana <code>DISCARD_AFTER_PROMOTION</code>. El nuevo contrato representa cada ventana temporal como un campo <code>window</code> explícito, y la lógica de descarte de promociones se expresa en el campo <code>schedule</code>.
+          <div class="migration-metric-list">
+            <code>t_a24n</code> <code>t_u24n</code> <code>t_a72n</code> <code>t_u72n</code> <code>t_a168n</code> <code>…</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="migration-card" style="--c:var(--accent-orange)">
+        <div class="migration-card-title">🛒 Métricas de add-to-cart <span class="pill pill-orange" style="margin-left:6px">KPIENGINE-1140</span></div>
+        <div class="migration-card-body">
+          16 métricas activas en producción, organizadas en tres grupos: sin agrupación por MOCACO, agrupadas por MOCACO en unidades, y agrupadas por MOCACO en importe. Se verificará el soporte del nuevo contrato para agregadores como <code>CATEGORY_ID</code> y <code>SEGMENT_ID</code>.
+          <div class="migration-metric-list">
+            <code>t_c4n</code> <code>t_c12n</code> <code>t_c24n</code> <code>t_c24pc</code> <code>t_ca24n</code> <code>t_ca24pcr</code> <code>…</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="migration-card" style="--c:var(--accent-cyan)">
+        <div class="migration-card-title">📦 Métricas de stock <span class="pill pill-cyan" style="margin-left:6px">KPIENGINE-1130</span></div>
+        <div class="migration-card-body">
+          Las métricas de stock son de tipo <strong>snapshot</strong> (inventario actual, sin ventana deslizante). Se definirá cómo representar <code>period.type: INFINITE</code> en el nuevo contrato. Las métricas derivadas como <code>ksmu24ni</code> (ratio stock/ventas) requieren análisis adicional sobre soporte de fórmulas multi-fuente.
+          <div class="migration-metric-list">
+            <code>stock</code> <code>sm</code> <code>kstkcc</code> <code>ksmu24ni</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="migration-card" style="--c:var(--accent-purple)">
+        <div class="migration-card-title">📊 Ratios de conversión <span class="pill pill-purple" style="margin-left:6px">KPIENGINE-1154</span></div>
+        <div class="migration-card-body">
+          Métricas compuestas que combinan dos fuentes (ventas e impresiones) mediante la fórmula <code>unidades / (impresiones + 1)</code>. Se analizará si el nuevo contrato soporta fórmulas divisorias multi-fuente o si el ratio debe calcularse en el consumidor usando las métricas componentes.
+          <div class="migration-metric-list">
+            <code>kcrcs24n</code> <code>kcrcs10dn</code> <code>t_i24n</code> <code>t_i10dn</code>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-green" style="margin-top: 20px;">
+      <span class="callout-icon">✅</span>
+      <div class="callout-body"><strong>Sin breaking change para consumidores:</strong> durante la transición ambos modelos coexisten. Los consumidores actuales siguen recibiendo los mismos valores. Una vez verificada la equivalencia en integración, el modelo anterior se retira.</div>
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 5 — MODELO ANTERIOR vs NUEVO ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-yellow)"></div>
+      <div>
+        <div class="section-title">Comparativa: modelo anterior vs. nuevo contrato</div>
+        <div class="section-desc">Misma métrica de ventas expresada en ambos modelos</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:0">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--accent-red);padding-bottom:6px">Antes — Modelo legacy</div>
+        <div class="code-block" style="margin-top:0;border-color:rgba(255,59,48,0.2)">
+          <div class="code-block-header"><span class="code-block-lang">JSON — /metric-definitions</span></div>
+          <pre><span class="code-p">{</span>
+  <span class="code-n">"id"</span><span class="code-p">:</span>                 <span class="code-s">"t_a24n"</span><span class="code-p">,</span>
+  <span class="code-n">"ecommerceEventType"</span><span class="code-p">:</span> <span class="code-s">"SOLD_AMOUNT"</span><span class="code-p">,</span>
+  <span class="code-n">"groupBy"</span><span class="code-p">: [</span>
+    <span class="code-s">"STORE_ID"</span><span class="code-p">,</span>
+    <span class="code-s">"COMMERCIAL_COMPONENT_ID"</span>
+  <span class="code-p">],</span>
+  <span class="code-n">"period"</span><span class="code-p">: {</span>
+    <span class="code-n">"value"</span><span class="code-p">:</span> <span class="code-v">24</span><span class="code-p">,</span>
+    <span class="code-n">"type"</span><span class="code-p">:</span>  <span class="code-s">"DISCARD_AFTER_PROMOTION"</span>
+  <span class="code-p">},</span>
+  <span class="code-n">"filterBy"</span><span class="code-p">: {</span>
+    <span class="code-n">"allow"</span><span class="code-p">: [],</span> <span class="code-n">"deny"</span><span class="code-p">: []</span>
+  <span class="code-p">}</span>
+<span class="code-p">}</span></pre>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--accent-green);padding-bottom:6px">Después — Nuevo contrato</div>
+        <div class="code-block" style="margin-top:0;border-color:rgba(52,199,89,0.2)">
+          <div class="code-block-header"><span class="code-block-lang">JSON — /metrics</span></div>
+          <pre><span class="code-p">{</span>
+  <span class="code-n">"id"</span><span class="code-p">:</span>          <span class="code-s">"sales_24_hours"</span><span class="code-p">,</span>
+  <span class="code-n">"source"</span><span class="code-p">:</span>      <span class="code-s">"SALES"</span><span class="code-p">,</span>
+  <span class="code-n">"window"</span><span class="code-p">: {</span>
+    <span class="code-n">"value"</span><span class="code-p">:</span> <span class="code-v">24</span><span class="code-p">,</span> <span class="code-n">"unit"</span><span class="code-p">:</span> <span class="code-s">"HOURS"</span>
+  <span class="code-p">},</span>
+  <span class="code-n">"schedule"</span><span class="code-p">:</span>    <span class="code-s">"5m"</span><span class="code-p">,</span>
+  <span class="code-n">"aggregators"</span><span class="code-p">: [</span>
+    <span class="code-s">"STORE_ID"</span><span class="code-p">,</span>
+    <span class="code-s">"COMMERCIAL_COMPONENT_ID"</span>
+  <span class="code-p">],</span>
+  <span class="code-n">"filters"</span><span class="code-p">: [],</span>
+  <span class="code-n">"metrics"</span><span class="code-p">: [</span>
+    <span class="code-p">{</span> <span class="code-n">"operator"</span><span class="code-p">:</span> <span class="code-s">"SUM"</span><span class="code-p">,</span> <span class="code-n">"column"</span><span class="code-p">:</span> <span class="code-s">"amount"</span><span class="code-p">,</span> <span class="code-n">"name"</span><span class="code-p">:</span> <span class="code-s">"a24n"</span> <span class="code-p">},</span>
+    <span class="code-p">{</span> <span class="code-n">"operator"</span><span class="code-p">:</span> <span class="code-s">"SUM"</span><span class="code-p">,</span> <span class="code-n">"column"</span><span class="code-p">:</span> <span class="code-s">"units"</span><span class="code-p">,</span>  <span class="code-n">"name"</span><span class="code-p">:</span> <span class="code-s">"u24n"</span>  <span class="code-p">}</span>
+  <span class="code-p">]</span>
+<span class="code-p">}</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECCIÓN 6 — HOJA DE RUTA ══ -->
+  <div class="section-block reveal">
+    <div class="section-header">
+      <div class="section-accent" style="background:var(--accent-orange)"></div>
+      <div>
+        <div class="section-title">Hoja de ruta</div>
+        <div class="section-desc">Secuencia de entrega para la adopción completa del nuevo modelo</div>
+      </div>
+    </div>
+
+    <div class="insight-flow">
+      <div class="insight-card" style="--c:var(--accent-blue)">
+        <div class="insight-step">Fase 01 · Fundación</div>
+        <div class="insight-text">Diseño e implementación del <strong>nuevo contrato de API</strong> (endpoint de creación y consulta) e integración con el flujo interno de cálculo. Validaciones, planificador, motor de filtros y agregación.</div>
+      </div>
+      <div class="insight-card" style="--c:var(--accent-orange)">
+        <div class="insight-step">Fase 02 · Migración</div>
+        <div class="insight-text">Reexpresión de todo el <strong>catálogo existente</strong> bajo el nuevo contrato: ventas, add-to-cart, stock y ratios de conversión. Verificación de equivalencia en entorno de integración.</div>
+      </div>
+      <div class="insight-card" style="--c:var(--accent-green)">
+        <div class="insight-step">Fase 03 · Deprecación</div>
+        <div class="insight-text">Una vez completada la migración y validada la equivalencia, <strong>retirada del modelo anterior</strong>. Los consumidores habrán migrado su integración al nuevo contrato.</div>
+      </div>
+    </div>
+
+    <div class="issue-list">
+      <div class="issue-card">
+        <div class="issue-card-header">
+          <span class="issue-icon">🔍</span>
+          <span class="issue-title">Puntos abiertos a resolver</span>
+        </div>
+        <div class="issue-body">
+          <ul style="margin-left:16px;margin-top:4px;display:flex;flex-direction:column;gap:6px">
+            <li>¿Cómo expresar métricas de tipo <strong>snapshot</strong> (sin ventana temporal deslizante) en el nuevo contrato? Las métricas de stock necesitan una definición documentada para <code>window: INFINITE</code>.</li>
+            <li>¿Soporta el nuevo contrato <strong>fórmulas divisorias multi-fuente</strong>? Los ratios de conversión (<code>kcrcs24n</code>) combinan ventas e impresiones. Si no, el cálculo debe delegarse al consumidor.</li>
+            <li>¿La proyección de <code>COMMERCIAL_COMPONENT_ID</code> en métricas por MOCACO se resuelve <strong>automáticamente</strong> por el motor o debe declararse explícitamente en <code>aggregators</code>?</li>
+            <li>¿Se necesita un <strong>periodo de convivencia</strong> con ambos modelos activos en paralelo para garantizar cero impacto en consumidores actuales?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.fromTo(el, { opacity: 0, y: 18 }, {
+      opacity: 1, y: 0, duration: 0.55, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+    });
+  });
+</script>
+</body>
+</html>
